@@ -1,5 +1,5 @@
 # Copyright (C) 2009 TWIKI.NET (http://www.twiki.net)
-# Copyright (C) 2009-2011 Foswiki Contributors
+# Copyright (C) 2009-2014 Foswiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -14,6 +14,10 @@
 # For licensing info read LICENSE file in the Foswiki root.
 
 package Foswiki::Contrib::Stringifier::Plugins::XLSX;
+
+use strict;
+use warnings;
+
 use Foswiki::Contrib::Stringifier::Base ();
 our @ISA = qw( Foswiki::Contrib::Stringifier::Base );
 

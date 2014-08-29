@@ -12,44 +12,46 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 
-package Foswiki::Contrib::Stringifier::Plugins::DOC_abiword;
+package Foswiki::Contrib::Stringifier::Plugins::DOC_soffice;
 
 use strict;
 use warnings;
 
 use Foswiki::Contrib::Stringifier::Base ();
 our @ISA = qw( Foswiki::Contrib::Stringifier::Base );
-use File::Temp qw/tmpnam/;
 
-my $abiword = $Foswiki::cfg{StringifierContrib}{abiwordCmd} || 'abiword';
+use Foswiki::Func ();
+use File::Temp ();
+use File::Basename qw(basename);
 
-#only load abiword if the user has selected it in configure - Sven & Andrew have had no success with it
+my $soffice = $Foswiki::cfg{StringifierContrib}{sofficeCmd} || '/usr/bin/soffice';
+
 if (defined($Foswiki::cfg{StringifierContrib}{WordIndexer}) && 
-    ($Foswiki::cfg{StringifierContrib}{WordIndexer} eq 'abiword')) {
-# Only if abiword exists, I register myself.
-    if (__PACKAGE__->_programExists($abiword)){
-        __PACKAGE__->register_handler("application/word", ".doc");
+    ($Foswiki::cfg{StringifierContrib}{WordIndexer} eq 'soffice')) {
+    if (-f $soffice){
+        __PACKAGE__->register_handler("application/word", ".doc", "text/docx", ".docx");
     }
 }
 
 sub stringForFile {
     my ($self, $file) = @_;
-    my $tmp_file = tmpnam() . ".txt";
+    my $tmpDir = File::Temp->newdir();
     
-    my $cmd = $abiword . ' --to=%TMPFILE|F% %FILENAME|F%';
-    my ($output, $exit) = Foswiki::Sandbox->sysCommand($cmd, TMPFILE => $tmp_file, FILENAME => $file);
+    my $cmd = $soffice . ' --convert-to txt:Text --invisible --headless --minimized --outdir %OUTDIR|F% %FILENAME|F%';
+
+    my ($data, $exit) = Foswiki::Sandbox->sysCommand(
+        $cmd,
+        OUTDIR => $tmpDir->dirname,
+        FILENAME  => $file,
+    );
 
     return '' unless ($exit == 0);
 
-    my $in;
-    open($in, $tmp_file) or return "";
-    local $/ = undef;    # set to read to EOF
-    my $text = <$in>;
-    close($in);
+    my $txtFile = $tmpDir->dirname . '/' . basename($file, ".docx", ".doc") . '.txt';
 
-    unlink($tmp_file);
+    my $text = Foswiki::Func::readFile($txtFile);
 
-    $text = $self->decode($text, $Foswiki::cfg{StringifierContrib}{CharSet}{abiword} || 'utf-8');
+    $text = $self->decode($text, $Foswiki::cfg{StringifierContrib}{CharSet}{soffice} || 'utf-8');
     $text = $self->encode($text);
 
     $text =~ s/^\s+//g;
@@ -59,3 +61,4 @@ sub stringForFile {
 }
 
 1;
+

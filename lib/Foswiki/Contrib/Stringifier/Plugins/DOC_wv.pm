@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2011 Foswiki Contributors
+# Copyright (C) 2009-2014 Foswiki Contributors
 #
 # For licensing info read LICENSE file in the Foswiki root.
 # This program is free software; you can redistribute it and/or
@@ -13,8 +13,13 @@
 # http://www.gnu.org/copyleft/gpl.html
 
 package Foswiki::Contrib::Stringifier::Plugins::DOC_wv;
+
+use strict;
+use warnings;
+
 use Foswiki::Contrib::Stringifier::Base ();
 use Foswiki::Contrib::Stringifier ();
+
 our @ISA = qw( Foswiki::Contrib::Stringifier::Base );
 use File::Temp qw/tmpnam/;
 
@@ -39,6 +44,7 @@ sub stringForFile {
     
     return '' unless ($exit == 0);
 
+    my $in;
     open($in, $tmp_file) or return "";
     local $/ = undef;    # set to read to EOF
     my $text = <$in>;

@@ -1,5 +1,5 @@
 # Copyright (C) 2009 TWIKI.NET (http://www.twiki.net)
-# Copyright (C) 2009-2011 Foswiki Contributors
+# Copyright (C) 2009-2014 Foswiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -14,14 +14,21 @@
 # For licensing info read LICENSE file in the Foswiki root.
 
 package Foswiki::Contrib::Stringifier::Plugins::DOCX;
+
+use strict;
+use warnings;
+
 use Foswiki::Contrib::Stringifier::Base ();
 our @ISA = qw( Foswiki::Contrib::Stringifier::Base );
 
 my $docx2txt = $Foswiki::cfg{StringifierContrib}{docx2txtCmd} || 'docx2txt.pl';
 
 # Only if docx2txt.pl exists, I register myself.
-if (__PACKAGE__->_programExists($docx2txt)){
-    __PACKAGE__->register_handler("text/docx", ".docx");
+if (   defined( $Foswiki::cfg{StringifierContrib}{WordIndexer} )
+    && ( $Foswiki::cfg{StringifierContrib}{WordIndexer} ne 'soffice' )
+    && __PACKAGE__->_programExists($docx2txt) )
+{
+    __PACKAGE__->register_handler( "text/docx", ".docx" );
 }
 
 sub stringForFile {

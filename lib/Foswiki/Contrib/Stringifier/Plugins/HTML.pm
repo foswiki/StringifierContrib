@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2011 Foswiki Contributors
+# Copyright (C) 2009-2014 Foswiki Contributors
 #
 # For licensing info read LICENSE file in the Foswiki root.
 # This program is free software; you can redistribute it and/or
@@ -12,8 +12,11 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 
-
 package Foswiki::Contrib::Stringifier::Plugins::HTML;
+
+use strict;
+use warnings;
+
 use Foswiki::Contrib::Stringifier::Base ();
 our @ISA = qw( Foswiki::Contrib::Stringifier::Base );
 

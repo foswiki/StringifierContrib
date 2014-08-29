@@ -2,7 +2,7 @@
 
 # docx2txt, a command-line utility to convert Docx documents to text format.
 # Copyright (C) 2008-2009 Sandeep Kumar
-# Copyright (C) 2009-2011 Foswiki Contributors
+# Copyright (C) 2009-2014 Foswiki Contributors
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -58,6 +58,9 @@
 #
 # Adjust the settings here.
 #
+
+use strict;
+use warnings;
 
 my $unzip = "/usr/bin/unzip";  # Windows path like "C:\\path\\to\\unzip.exe"
 my $nl = "\n";		# Alternative is "\r\n".

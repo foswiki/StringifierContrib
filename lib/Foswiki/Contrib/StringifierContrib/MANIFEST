@@ -4,12 +4,14 @@ lib/Foswiki/Contrib/StringifierContrib/Config.spec 0644
 lib/Foswiki/Contrib/StringifierContrib.pm 0644
 lib/Foswiki/Contrib/Stringifier/Plugins/DOC_abiword.pm 0644
 lib/Foswiki/Contrib/Stringifier/Plugins/DOC_antiword.pm 0644
+lib/Foswiki/Contrib/Stringifier/Plugins/DOC_soffice.pm 0644
 lib/Foswiki/Contrib/Stringifier/Plugins/DOC_wv.pm 0644
 lib/Foswiki/Contrib/Stringifier/Plugins/DOCX.pm 0644
 lib/Foswiki/Contrib/Stringifier/Plugins/HTML.pm 0644
 lib/Foswiki/Contrib/Stringifier/Plugins/ODT.pm 0644
 lib/Foswiki/Contrib/Stringifier/Plugins/PDF.pm 0644
 lib/Foswiki/Contrib/Stringifier/Plugins/PPT.pm 0644
+lib/Foswiki/Contrib/Stringifier/Plugins/PPT_soffice.pm 0644
 lib/Foswiki/Contrib/Stringifier/Plugins/PPTX.pm 0644
 lib/Foswiki/Contrib/Stringifier/Plugins/Text.pm 0644
 lib/Foswiki/Contrib/Stringifier/Plugins/XLS.pm 0644
@@ -53,7 +55,6 @@ test/unit/StringifierContrib/attachement_examples/Simple_example.xlsb 0644
 test/unit/StringifierContrib/attachement_examples/Simple_example.xlsm 0644
 test/unit/StringifierContrib/attachement_examples/Simple_example.xlsx 0644
 test/unit/StringifierContrib/attachement_examples/test.odt 0644
-test/unit/StringifierContrib/StringifierTest.pm 0644
 test/unit/StringifierContrib/Doc_abiwordTests.pm 0644
 test/unit/StringifierContrib/Doc_antiwordTests.pm 0644
 test/unit/StringifierContrib/Doc_wvTests.pm 0644
@@ -64,6 +65,7 @@ test/unit/StringifierContrib/PdfTests.pm 0644
 test/unit/StringifierContrib/PptTests.pm 0644
 test/unit/StringifierContrib/PptxTests.pm 0644
 test/unit/StringifierContrib/StringifierContribSuite.pm 0644
+test/unit/StringifierContrib/StringifierTest.pm 0644
 test/unit/StringifierContrib/StringifyBaseTest.pm 0644
 test/unit/StringifierContrib/tree_example/sub_tree/test_file.txt 0644
 test/unit/StringifierContrib/tree_example/test_file.txt 0644

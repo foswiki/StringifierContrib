@@ -1,5 +1,5 @@
 # Copyright (C) 2009 TWIKI.NET (http://www.twiki.net)
-# Copyright (C) 2009-2011 Foswiki Contributors
+# Copyright (C) 2009-2014 Foswiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -14,22 +14,28 @@
 # For licensing info read LICENSE file in the Foswiki root.
 
 package Foswiki::Contrib::Stringifier::Plugins::PPTX;
+
+use strict;
+use warnings;
+
 use Foswiki::Contrib::Stringifier::Base ();
 our @ISA = qw( Foswiki::Contrib::Stringifier::Base );
 
 my $pptx2txt = $Foswiki::cfg{StringifierContrib}{pptx2txtCmd} || 'pptx2txt.pl';
 
-# Only if ppthtml.pl exists, I register myself.
-if (__PACKAGE__->_programExists($pptx2txt)){
-    __PACKAGE__->register_handler("text/pptx", ".pptx");
+if ( (!defined($Foswiki::cfg{StringifierContrib}{PowerpointIndexer}) || $Foswiki::cfg{StringifierContrib}{PowerpointIndexer} eq 'script')
+  && (__PACKAGE__->_programExists($pptx2txt)))
+{
+  __PACKAGE__->register_handler("text/pptx", ".pptx");
 }
 
 sub stringForFile {
     my ($self, $filename) = @_;
     
     my $cmd = $pptx2txt . ' %FILENAME|F% -';
+
     my ($text, $exit) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $filename);
-    
+
     return '' unless ($exit == 0);
 
     $text = $self->decode($text, $Foswiki::cfg{StringifierContrib}{CharSet}{pptx2txt} || 'utf-8');

@@ -5,7 +5,7 @@
 # Microsoft Office presentation files.
 # Copyright (C) 2009 - Sopan Shewale - sopan.shewale@gmail.com
 #                      TWIKI.NET     - sales@twiki.net  
-# Copyright (C) 2009-2011 Foswiki Contributors
+# Copyright (C) 2009-2014 Foswiki Contributors
 #
 # The development of this tools is completely based on other similar 
 # tool called docx2txt - available at http://docx2txt.sourceforge.net/
@@ -32,6 +32,9 @@
 #
 # Adjust the settings here.
 #
+
+use strict;
+use warnings;
 
 my $unzip = "/usr/bin/unzip";
 my $nl = "\n";		# Alternative is "\r\n".
@@ -74,7 +77,7 @@ while(/<Override PartName="(\/ppt\/slides\/.*?)" ContentType=".*?\/([^\/]*?slide
     $slides{"$1"} = $2;
 }
 
-my $notes;
+my %notes;
 while(/<Override PartName="(\/ppt\/notesSlides\/.*?)" ContentType=".*?\/([^\/]*?notesSlide\+xml)"?\/>/g)
 {
     $notes{"$1"} = $2;
@@ -119,6 +122,7 @@ open($txtfile, "> $ARGV[1]") || die "Can't create <$ARGV[1]> for output!\n";
 
 $_ = `$unzip -p '$ARGV[0]' ppt/_rels/presentation.xml.rels 2>/dev/null`;
 
+my %docurels;
 while (/<Relationship Id="(.*?)" Type=".*?\/([^\/]*?)" Target="(.*?)"( .*?)?\/>/g)
 {
     $docurels{"$2:$1"} = $3;
