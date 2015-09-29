@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 #
-# Copyright (C) 2009-2014 Foswiki Contributors
+# Copyright (C) 2009-2015 Foswiki Contributors
 #
 # For licensing info read LICENSE file in the Foswiki root.
 # This program is free software; you can redistribute it and/or
@@ -21,23 +21,33 @@ use warnings;
 
 use Foswiki::Contrib::Stringifier::Base;
 our @ISA = qw( Foswiki::Contrib::Stringifier::Base );
-use Carp;
-use File::MMagic;
-use File::Spec::Functions qw(rel2abs);
+use File::MMagic();
 
-our $magic = File::MMagic->new();
+our $mmagic;
+sub mmagic {
+  $mmagic = File::MMagic->new() unless $mmagic;
+  return $mmagic;
+}
 
 sub stringFor {
   my ($class, $filename) = @_;
 
   return unless -r $filename;
-  my $mime = $magic->checktype_filename($filename);
+  my $mime = mmagic->checktype_filename($filename);
   my $self = $class->handler_for($filename, $mime)->new();
 
   #print STDERR "file $filename is a $mime ... using $self\n";
 
-  return $self->stringForFile($filename);
+  my $text = $self->stringForFile($filename);
+
+  $text = $self->decode($text);
+
+  $text =~ s/^\s+//;
+  $text =~ s/\s+$//;
+
+  return $text;
 }
+
 
 1;
 

@@ -12,33 +12,40 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 
-package Foswiki::Contrib::Stringifier::Plugins::DOC_antiword;
+package Foswiki::Contrib::Stringifier::Plugins::DOC_catdoc;
 
 use strict;
 use warnings;
 
 use Foswiki::Contrib::Stringifier::Base ();
+use Foswiki::Contrib::Stringifier ();
+
 our @ISA = qw( Foswiki::Contrib::Stringifier::Base );
+use File::Temp qw/tmpnam/;
 
-my $antiword = $Foswiki::cfg{StringifierContrib}{antiwordCmd} || 'antiword';
+my $catdoc = $Foswiki::cfg{StringifierContrib}{catdocCmd} || 'catdoc';
 
-if (!defined($Foswiki::cfg{StringifierContrib}{WordIndexer}) || 
-    ($Foswiki::cfg{StringifierContrib}{WordIndexer} eq 'antiword')) {
-    # Only if antiword exists, I register myself.
-    if (__PACKAGE__->_programExists($antiword)){
+if (defined($Foswiki::cfg{StringifierContrib}{WordIndexer}) &&
+    ($Foswiki::cfg{StringifierContrib}{WordIndexer} eq 'catdoc')) {
+    # Only if wv exists, I register myself.
+    if (__PACKAGE__->_programExists($catdoc)){
         __PACKAGE__->register_handler("application/word", ".doc");
     }
 }
 
+
 sub stringForFile {
     my ($self, $file) = @_;
-    
-    my $cmd = $antiword . ' %FILENAME|F%';
-    my ($text, $exit) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $file);
 
-    return '' unless ($exit == 0);
+    my $cmd = $catdoc . ' %FILENAME|F%';
+    my ($output, $exit, $error) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $file);
     
-    return $text;
+    if ($exit) {
+      print STDERR "ERROR: $catdoc returned with code $exit - $error\n";
+      return "";
+    }
+
+    return $output;
 }
 
 1;

@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2014 Foswiki Contributors
+# Copyright (C) 2009-2015 Foswiki Contributors
 #
 # For licensing info read LICENSE file in the Foswiki root.
 # This program is free software; you can redistribute it and/or
@@ -25,7 +25,7 @@ use File::Temp qw/tmpnam/;
 
 my $wvText = $Foswiki::cfg{StringifierContrib}{wvTextCmd} || 'wvText';
 
-if (!defined($Foswiki::cfg{StringifierContrib}{WordIndexer}) || 
+if (defined($Foswiki::cfg{StringifierContrib}{WordIndexer}) &&
     ($Foswiki::cfg{StringifierContrib}{WordIndexer} eq 'wv')) {
     # Only if wv exists, I register myself.
     if (__PACKAGE__->_programExists($wvText)){
@@ -52,8 +52,7 @@ sub stringForFile {
 
     unlink($tmp_file);
 
-    $text = $self->decode($text, $Foswiki::cfg{StringifierContrib}{CharSet}{wv} || 'utf-8');
-    return $self->encode($text);
+    return $text;
 }
 
 1;

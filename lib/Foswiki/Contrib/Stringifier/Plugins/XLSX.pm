@@ -1,5 +1,5 @@
 # Copyright (C) 2009 TWIKI.NET (http://www.twiki.net)
-# Copyright (C) 2009-2014 Foswiki Contributors
+# Copyright (C) 2009-2015 Foswiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -57,8 +57,7 @@ sub stringForFile {
         }
     }
 
-    $text = $self->decode($text, $Foswiki::cfg{StringifierContrib}{CharSet}{xlsx} || 'utf-8');
-    return $self->encode($text);
+    return $text;
 }
 
 1;

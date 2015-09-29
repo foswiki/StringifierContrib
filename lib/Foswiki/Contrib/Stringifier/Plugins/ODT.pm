@@ -1,4 +1,4 @@
-# Copyright (C) 2011-2014 Foswiki Contributors
+# Copyright (C) 2011-2015 Foswiki Contributors
 #
 # For licensing info read LICENSE file in the Foswiki root.
 # This program is free software; you can redistribute it and/or
@@ -41,8 +41,7 @@ sub stringForFile {
     my $cmd = $odt2text . ' --encoding=UTF-8 %FILENAME|F%';
     my ($text, $exit) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $filename);
 
-    $text = $self->decode($text, $Foswiki::cfg{StringifierContrib}{CharSet}{odt2txt} || 'utf-8');
-    return $self->encode($text);
+    return $text;
 }
 
 1;

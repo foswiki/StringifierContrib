@@ -1,10 +1,12 @@
 File::MMagic,>0,cpan,Required
+File::Which,>0,cpan,Required
 Module::Pluggable,>0,cpan,Required
 Spreadsheet::ParseExcel,>0,cpan,Required for =.xls= files
 Spreadsheet::XLSX,>0,cpan,Required for =.xlsx= files
 Encode,>0,cpan,Required
 Error,>0,cpan,Required
-ppthtml,>0,c,Required for indexing =.ppt= files. Part of xlhtml
+catdoc,>0,c,Optional
+ppthtml,>0,c,Required
 pdftotext,>0,c,Required for indexing =.pdf=. Part of poppler-utils
 soffice,>0,c,One of antiword, abiword, soffice or wvWare is required for =.doc= and =.docx0 files
 antiword,>0,c,One of antiword, abiword, soffice or wvWare is required for =.doc= files

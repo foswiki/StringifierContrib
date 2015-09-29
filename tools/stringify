@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 #
-# Copyright (C) 2009-2014 Foswiki Contributors
+# Copyright (C) 2009-2015 Foswiki Contributors
 #
 # For licensing info read LICENSE file in the Foswiki root.
 # This program is free software; you can redistribute it and/or
@@ -17,28 +17,28 @@
 use strict;
 use warnings;
 
+use File::Spec();
+
 # Set library paths in @INC, at compile time
 BEGIN {
-  if (-e './setlib.cfg') {
-    unshift @INC, '.';
-  } elsif (-e '../bin/setlib.cfg') {
-    unshift @INC, '../bin';
-  }
-  require 'setlib.cfg';
+    my ( $volume, $binDir, $action ) = File::Spec->splitpath(__FILE__);
+    my $setlib = File::Spec->catpath( $volume, $binDir, 'setlib.cfg' );
+    @INC = ( '.', grep { $_ ne '.' } @INC ) unless $binDir;
+    require $setlib;
 }
 
 use Foswiki ();
 use Foswiki::Contrib::Stringifier ();
-use Cwd ();
 
 my $fileName = $ARGV[0] ;
 die "no filename" unless $fileName;
-die "can't read $fileName" unless -r $fileName;
 
 $fileName = Cwd::abs_path($fileName);
+die "can't read $fileName" unless -r $fileName;
 
 my $stringifier = new Foswiki::Contrib::Stringifier();
 my $text = $stringifier->stringFor($fileName);
+binmode(STDOUT, ":utf8");
 print $text."\n" if $text;
 
 1;

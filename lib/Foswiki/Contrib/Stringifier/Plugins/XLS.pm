@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2014 Foswiki Contributors
+# Copyright (C) 2009-2015 Foswiki Contributors
 #
 # For licensing info read LICENSE file in the Foswiki root.
 # This program is free software; you can redistribute it and/or
@@ -35,8 +35,7 @@ sub stringForFile {
     
     return '' unless ($exit == 0);
 
-    $text = $self->decode($text, $Foswiki::cfg{StringifierContrib}{CharSet}{xls2txt} || 'utf-8');
-    return $self->encode($text);
+    return $text;
 }
 
 1;

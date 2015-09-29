@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2014 Foswiki Contributors
+# Copyright (C) 2009-2015 Foswiki Contributors
 #
 # For licensing info read LICENSE file in the Foswiki root.
 # This program is free software; you can redistribute it and/or
@@ -20,11 +20,10 @@ use warnings;
 use Foswiki::Contrib::Stringifier::Base ();
 our @ISA = qw( Foswiki::Contrib::Stringifier::Base );
 use Foswiki::Contrib::Stringifier  ();
-use File::Temp qw/tmpnam/;
+use File::Temp qw/tempfile/;
 
 my $ppthtml = $Foswiki::cfg{StringifierContrib}{ppthtmlCmd} || 'ppthtml';
 
-# Only if ppthtml exists, I register myself.
 if ((!defined($Foswiki::cfg{StringifierContrib}{PowerpointIndexer}) || $Foswiki::cfg{StringifierContrib}{PowerpointIndexer} eq 'script')
   && __PACKAGE__->_programExists($ppthtml))
 {
@@ -36,19 +35,23 @@ sub stringForFile {
     
     # First I convert PPT to HTML
     my $cmd = $ppthtml . ' %FILENAME|F%';
-    my ($output, $exit) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $filename);
-    
-    return '' unless ($exit == 0);
+    my ($output, $exit, $error) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $filename);
+    $output = $self->decode($output);
+
+    if ($exit) {
+      print STDERR "Eror: $ppthtml - $error\n";
+      return "";
+    }
 
     # put the html into a temporary file
-    my ($fh, $tmp_file) = tmpnam();
+    my ($fh, $tmpFile) = tempfile();
     print $fh $output;
 
     # use the HTML stringifier to convert HTML to TXT
     my $stringifier = Foswiki::Contrib::Stringifier::Plugins::HTML->new();
-    my $text = $stringifier->stringForFile($tmp_file);
+    my $text = $stringifier->stringForFile($tmpFile);
 
-    unlink($tmp_file);
+    unlink($tmpFile);
 
     return $text;
 }

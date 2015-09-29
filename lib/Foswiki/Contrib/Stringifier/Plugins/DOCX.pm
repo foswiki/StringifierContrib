@@ -1,5 +1,5 @@
 # Copyright (C) 2009 TWIKI.NET (http://www.twiki.net)
-# Copyright (C) 2009-2014 Foswiki Contributors
+# Copyright (C) 2009-2015 Foswiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -25,7 +25,6 @@ my $docx2txt = $Foswiki::cfg{StringifierContrib}{docx2txtCmd} || 'docx2txt.pl';
 
 # Only if docx2txt.pl exists, I register myself.
 if (   defined( $Foswiki::cfg{StringifierContrib}{WordIndexer} )
-    && ( $Foswiki::cfg{StringifierContrib}{WordIndexer} ne 'soffice' )
     && __PACKAGE__->_programExists($docx2txt) )
 {
     __PACKAGE__->register_handler( "text/docx", ".docx" );
@@ -33,14 +32,13 @@ if (   defined( $Foswiki::cfg{StringifierContrib}{WordIndexer} )
 
 sub stringForFile {
     my ($self, $filename) = @_;
-    
+
     my $cmd = $docx2txt . ' %FILENAME|F% -';
     my ($text, $exit) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $filename);
 
     return '' unless ($exit == 0);
 
-    $text = $self->decode($text, $Foswiki::cfg{StringifierContrib}{CharSet}{docx2txt} || 'utf-8');
-    return $self->encode($text);
+    return $text;
 }
 
 1;

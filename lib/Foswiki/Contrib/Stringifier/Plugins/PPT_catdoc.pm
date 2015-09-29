@@ -12,32 +12,38 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 
-package Foswiki::Contrib::Stringifier::Plugins::Text;
+package Foswiki::Contrib::Stringifier::Plugins::PPT_catdoc;
 
 use strict;
 use warnings;
 
 use Foswiki::Contrib::Stringifier::Base ();
 our @ISA = qw( Foswiki::Contrib::Stringifier::Base );
+use Foswiki::Contrib::Stringifier  ();
+use File::Temp qw/tmpnam/;
 
-# Note: I need not do any register, because I am the default handler for stringification!
+my $catppt = $Foswiki::cfg{StringifierContrib}{catpptCmd} || 'catppt';
 
-use Encode::Guess ();
+if ( defined($Foswiki::cfg{StringifierContrib}{PowerpointIndexer})
+  && $Foswiki::cfg{StringifierContrib}{PowerpointIndexer} eq 'catppt'
+  && __PACKAGE__->_programExists($catppt))
+{
+  __PACKAGE__->register_handler("text/ppt", ".ppt");
+}
 
 sub stringForFile {
-    my ( $self, $file ) = @_;
-    my $in;
-
-    # check it is a text file
-    return '' unless ( -e $file );
-
-    open($in, $file) or return "";
-    local $/ = undef;    # set to read to EOF
-    my $text = <$in>;
-    close($in);
-
-    $text =~ s/^\?//; # remove bom
+    my ($self, $filename) = @_;
     
-    return $text;
+    my $cmd = $catppt . ' %FILENAME|F%';
+    my ($output, $exit, $error) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $filename);
+    
+    if ($exit) {
+      print STDERR "ERROR: $catppt returned with code $exit - $error\n";
+      return "";
+    }
+
+    return $output;
 }
+
 1;
+

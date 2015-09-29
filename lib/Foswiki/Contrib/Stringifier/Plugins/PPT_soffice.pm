@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2014 Foswiki Contributors
+# Copyright (C) 2009-2015 Foswiki Contributors
 #
 # For licensing info read LICENSE file in the Foswiki root.
 # This program is free software; you can redistribute it and/or
@@ -26,11 +26,12 @@ use File::Basename qw(basename);
 
 my $soffice = $Foswiki::cfg{StringifierContrib}{sofficeCmd} || '/usr/bin/soffice';
 
-if (defined($Foswiki::cfg{StringifierContrib}{PowerpointIndexer}) && 
-    ($Foswiki::cfg{StringifierContrib}{PowerpointIndexer} eq 'soffice')) {
-    if (-f $soffice){
-        __PACKAGE__->register_handler("text/ppt", ".ppt", "text/pptx", ".pptx");
-    }
+if (defined($Foswiki::cfg{StringifierContrib}{PowerpointIndexer})
+  && $Foswiki::cfg{StringifierContrib}{PowerpointIndexer} eq 'soffice')
+{
+  if (-f $soffice) {
+    __PACKAGE__->register_handler("text/ppt", ".ppt", "text/pptx", ".pptx");
+  }
 }
 
 sub stringForFile {

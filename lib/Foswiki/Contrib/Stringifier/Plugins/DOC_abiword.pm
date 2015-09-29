@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2014 Foswiki Contributors
+# Copyright (C) 2009-2015 Foswiki Contributors
 #
 # For licensing info read LICENSE file in the Foswiki root.
 # This program is free software; you can redistribute it and/or
@@ -37,9 +37,12 @@ sub stringForFile {
     my $tmp_file = tmpnam() . ".txt";
     
     my $cmd = $abiword . ' --to=%TMPFILE|F% %FILENAME|F%';
-    my ($output, $exit) = Foswiki::Sandbox->sysCommand($cmd, TMPFILE => $tmp_file, FILENAME => $file);
+    my ($output, $exit, $error) = Foswiki::Sandbox->sysCommand($cmd, TMPFILE => $tmp_file, FILENAME => $file);
 
-    return '' unless ($exit == 0);
+    if ($exit) {
+      print STDERR "ERROR: $abiword returned with code $exit - $error\n";
+      return "";
+    }
 
     my $in;
     open($in, $tmp_file) or return "";
@@ -48,12 +51,6 @@ sub stringForFile {
     close($in);
 
     unlink($tmp_file);
-
-    $text = $self->decode($text, $Foswiki::cfg{StringifierContrib}{CharSet}{abiword} || 'utf-8');
-    $text = $self->encode($text);
-
-    $text =~ s/^\s+//g;
-    $text =~ s/\s+$//g;
 
     return $text;
 }

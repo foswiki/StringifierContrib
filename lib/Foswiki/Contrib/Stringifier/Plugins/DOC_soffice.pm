@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2014 Foswiki Contributors
+# Copyright (C) 2009-2015 Foswiki Contributors
 #
 # For licensing info read LICENSE file in the Foswiki root.
 # This program is free software; you can redistribute it and/or
@@ -50,12 +50,6 @@ sub stringForFile {
     my $txtFile = $tmpDir->dirname . '/' . basename($file, ".docx", ".doc") . '.txt';
 
     my $text = Foswiki::Func::readFile($txtFile);
-
-    $text = $self->decode($text, $Foswiki::cfg{StringifierContrib}{CharSet}{soffice} || 'utf-8');
-    $text = $self->encode($text);
-
-    $text =~ s/^\s+//g;
-    $text =~ s/\s+$//g;
 
     return $text;
 }

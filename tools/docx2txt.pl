@@ -2,7 +2,7 @@
 
 # docx2txt, a command-line utility to convert Docx documents to text format.
 # Copyright (C) 2008-2009 Sandeep Kumar
-# Copyright (C) 2009-2014 Foswiki Contributors
+# Copyright (C) 2009-2015 Foswiki Contributors
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -151,7 +151,8 @@ die "<$ARGV[0]> does not seem to be docx file!\n" if -T _;
 # Extract needed data from argument docx file.
 #
 
-if ($ENV{OS} =~ /^Windows/) {
+my $nulldevice;
+if ($ENV{OS} && $ENV{OS} =~ /^Windows/) {
     $nulldevice = "nul";
 } else {
     $nulldevice = "/dev/null";

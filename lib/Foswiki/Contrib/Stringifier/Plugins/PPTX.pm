@@ -1,5 +1,5 @@
 # Copyright (C) 2009 TWIKI.NET (http://www.twiki.net)
-# Copyright (C) 2009-2014 Foswiki Contributors
+# Copyright (C) 2009-2015 Foswiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -34,14 +34,14 @@ sub stringForFile {
     
     my $cmd = $pptx2txt . ' %FILENAME|F% -';
 
-    my ($text, $exit) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $filename);
+    my ($output, $exit, $error) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $filename);
 
-    return '' unless ($exit == 0);
+    if ($exit) {
+      print STDERR "ERROR: $pptx2txt returned with code $exit - $error\n";
+      return "";
+    }
 
-    $text = $self->decode($text, $Foswiki::cfg{StringifierContrib}{CharSet}{pptx2txt} || 'utf-8');
-    $text = $self->encode($text);
-
-    return $text;
+    return $output;
 }
 
 1;

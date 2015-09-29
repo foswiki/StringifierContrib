@@ -1,7 +1,6 @@
-%META:TOPICINFO{author="ProjectContributor" comment="reprev" date="1254480148" format="1.1" reprev="1.2" version="1.2"}%
-%META:TOPICPARENT{name="Contribs"}%
+%META:TOPICINFO{author="ProjectContributor" date="1443532042" format="1.1" version="1"}%
 ---+ StringifierContrib
-%SHORTDESCRIPTION%
+%FORMFIELD{"Description"}%
 
 This extension has been extracted from Foswiki:Extensions/KinoSearchContrib to make it available
 for search engines other than kinosearch.
@@ -128,17 +127,12 @@ Foswiki:Development/UnitTests for more information on unit testing.
 
 See Foswiki:Tasks/StringifierContrib for currently open tasks.
 
----++ Contrib Info
+---++ Dependencies
+%$DEPENDENCIES%
 
-<!--
-   * Set SHORTDESCRIPTION = Helper library to stringify binary document formats
--->
-
-|  Author(s): | Foswiki:Main.MarkusHesse, Foswiki:Main.SvenDowideit, Foswiki:Main.MichaelDaum & Foswiki:Main.AndrewJones |
-|  Copyright: | &copy; 2007, Foswiki:Main.MarkusHesse; &copy; 2009-2014, Foswiki Contributors |
-|  Release: | %$RELEASE% |
-|  Version: | %$VERSION% |
-|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+---++ Change History
+|  29 Sep 2015: | (4.00) added unicode support with Foswiki > 2.0 | 
+|  22 Jul 2015: | (3.10) added support for stringification of ppt using catdoc as ppthtml isn't available on some distros |
 |  29 Aug 2014: | (3.00) added support for stringification using open/libreoffice |
 |  07 May 2012: | (2.20) added configuration parameter to specify the encoding of the output of each external helper in use |
 |  17 Oct 2011: | (2.10) using wvText instead of wvHtml now; encoding stringified files to the site's charset now; fixed unit tests to use utf8 exclusively |
@@ -148,6 +142,15 @@ See Foswiki:Tasks/StringifierContrib for currently open tasks.
 |  23 Oct 2010: | (1.12) made system fault-tolerant in case of missing dependencies for a given file type; doc cleanup -- Foswiki:Main.WillNorris |
 |  12 Feb 2010: | robust parsing of password protected XLS files |
 |  02 Oct 2009: | extracted from Foswiki:Extensions/KinoSearchContrib (MD) |
-|  Dependencies: | %$DEPENDENCIES% |
-|  Home: | Foswiki:Extensions/%TOPIC% |
-|  Support: | Foswiki:Support/%TOPIC% |
+
+
+%META:FORM{name="PackageForm"}%
+%META:FIELD{name="Author" title="Author" value="Foswiki:Main.MarkusHesse, Foswiki:Main.SvenDowideit, Foswiki:Main.MichaelDaum & Foswiki:Main.AndrewJones"}%
+%META:FIELD{name="Copyright" title="Copyright" value="&copy; 2007, Foswiki:Main.MarkusHesse; &copy; 2009-2015, Foswiki Contributors"}%
+%META:FIELD{name="Description" title="Description" value="%25$SHORTDESCRIPTION%25"}%
+%META:FIELD{name="Home" title="Home" value="Foswiki:Extensions/%TOPIC%"}%
+%META:FIELD{name="License" title="License" value=""}%
+%META:FIELD{name="Release" title="Release" value="%$RELEASE%"}%
+%META:FIELD{name="Repository" title="Repository" value="https://github.com/foswiki/%TOPIC%"}%
+%META:FIELD{name="Support" title="Support" value="Foswiki:Support/%TOPIC%"}%
+%META:FIELD{name="Version" title="Version" value="%$VERSION%"}%

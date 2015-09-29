@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2014 Foswiki Contributors
+# Copyright (C) 2009-2015 Foswiki Contributors
 #
 # For licensing info read LICENSE file in the Foswiki root.
 # This program is free software; you can redistribute it and/or
@@ -18,6 +18,7 @@ use strict;
 use warnings;
 
 use Encode ();
+use File::Which ();
 
 use Module::Pluggable (require => 1, search_path => [qw/Foswiki::Contrib::Stringifier::Plugins/]);
 
@@ -54,7 +55,8 @@ use constant DEFAULT_HANDLER => "Foswiki::Contrib::Stringifier::Plugins::Text";
     sub _programExists {
 	my ($self, $program) = @_;
 
-	return defined(`$program 2>&1`);
+	my $path = File::Which::which($program);
+        return defined $path;
     }
 }
 
@@ -69,8 +71,6 @@ sub decode {
     my ( $self, $string, $charSet ) = @_;
 
     $charSet ||= $Foswiki::cfg{Site}{CharSet};
-    $charSet = Encode::resolve_alias( $charSet );
-
     return Encode::decode( $charSet, $string );
 }
 
@@ -78,8 +78,6 @@ sub encode {
     my ( $self, $string, $charSet ) = @_;
 
     $charSet ||= $Foswiki::cfg{Site}{CharSet};
-    $charSet = Encode::resolve_alias( $charSet );
-
     return Encode::encode( $charSet, $string );
 }
 

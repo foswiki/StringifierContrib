@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2014 Foswiki Contributors
+# Copyright (C) 2009-2015 Foswiki Contributors
 #
 # For licensing info read LICENSE file in the Foswiki root.
 # This program is free software; you can redistribute it and/or
@@ -33,8 +33,6 @@ sub stringForFile {
     my $cmd = $html2text . ' -nobs %FILENAME|F%';
     my ($text, $exit) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $filename);
 
-    $text = $self->decode($text, $Foswiki::cfg{StringifierContrib}{CharSet}{html2text} || 'utf-8');
-    $text = $self->encode($text);
     $text =~ s/<\?xml.*?\?>\s*//g;
 
     return $text;
