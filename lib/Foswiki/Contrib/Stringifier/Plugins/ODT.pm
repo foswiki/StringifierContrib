@@ -41,6 +41,9 @@ sub stringForFile {
     my $cmd = $odt2text . ' --encoding=UTF-8 %FILENAME|F%';
     my ($text, $exit) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $filename);
 
+    $text = $self->decode($text);
+    $text =~ s/^\s+|\s+$//g;
+
     return $text;
 }
 

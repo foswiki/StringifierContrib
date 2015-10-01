@@ -35,14 +35,17 @@ sub stringForFile {
     my ($self, $filename) = @_;
     
     my $cmd = $catppt . ' %FILENAME|F%';
-    my ($output, $exit, $error) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $filename);
+    my ($text, $exit, $error) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $filename);
     
     if ($exit) {
       print STDERR "ERROR: $catppt returned with code $exit - $error\n";
       return "";
     }
 
-    return $output;
+    $text = $self->decode($text);
+    $text =~ s/^\s+|\s+$//g;
+
+    return $text;
 }
 
 1;

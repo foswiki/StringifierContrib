@@ -57,6 +57,9 @@ sub stringForFile {
         }
     }
 
+    $text = $self->decode($text);
+    $text =~ s/^\s+|\s+$//g;
+
     return $text;
 }
 

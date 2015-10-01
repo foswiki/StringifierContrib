@@ -24,7 +24,6 @@ use Module::Pluggable (require => 1, search_path => [qw/Foswiki::Contrib::String
 
 __PACKAGE__->plugins;
 
-use constant DEFAULT_HANDLER => "Foswiki::Contrib::Stringifier::Plugins::Text";
 {
     my %mime_handlers;
     my %extension_handlers;
@@ -46,7 +45,7 @@ use constant DEFAULT_HANDLER => "Foswiki::Contrib::Stringifier::Plugins::Text";
         for my $spec (keys %extension_handlers) {
             if ($filename =~ /$spec$/) { return $extension_handlers{$spec} }
         }
-        return DEFAULT_HANDLER;
+        return;
     }
 
     # Returns 1, if the program can be called.

@@ -1,15 +1,15 @@
-%META:TOPICINFO{author="ProjectContributor" date="1443532042" format="1.1" version="1"}%
----+ StringifierContrib
+%META:TOPICINFO{author="ProjectContributor" date="1443690574" format="1.1" version="1"}%
+---+!! StringifierContrib
 %FORMFIELD{"Description"}%
-
-This extension has been extracted from Foswiki:Extensions/KinoSearchContrib to make it available
-for search engines other than kinosearch.
 
 %TOC%
 
----++ Supported file formats
+---++ Description
+This extension serves as a helper to stringify documents in a way that they can be indexed
+by full-text search engines such as Foswiki:Extensions/KinoSearchContrib or Foswiki:Extensions/SolrPlugin.
 
-   * =.txt=
+It supports all major office document formats such as:
+
    * =.html=
    * =.xml=
    * =.doc=
@@ -32,18 +32,22 @@ for search engines other than kinosearch.
    * =.sxi=
    * =.sti=
 
-If you add other file extensions, they are treated as ASCII files. If needed,
-you can add more specialised stringifiers for further document types (see below).
+%TOPIC% is organized in plugins to serialization a document format by delegating it to according backends.
+For some formats there are alternative backends to chose from. For example a DOC file can be serialized 
+by any of =abiword=, =antiword=, =catdoc=, =soffice= or =wvWare=. Use the one that serves best your needs and
+is available on your platform. For instance =soffice= is a very good choice to serve as a document converter.
+However using it is rather performance demanding. The more simpler ones suffice most of the time but may
+have an inferior quality of text being extracted.
 
----++ Backend for Word Documents
+---++ Backends for Word Documents
 
-To index Word 2003 Documents (=.doc=) you will need to install one of the following:
+To index Word Documents (=.doc=) you will need to install one of the following:
 
-   * =antiword= (recommended)
+   * =antiword=
    * =abiword=
+   * =catdoc=
+   * =soffice=
    * =wvWare=
-
-You can then select the tool to use in =configure=.
 
 ---++ Backend for PDF
 
@@ -51,13 +55,19 @@ To index =.pdf= files you need to install =proppler-utils=.
 
 ---++ Backend for PPT
 
-To index =.ppt= files you need to install =ppthtml=.
+To index =.ppt= files you may select one of the following:
+
+   * =catdoc= 
+   * =pphtml=
+   * =soffice=
 
 ---++ Backends for DOCX, PPTX, XLSX
 
 To index these file types, you will need to install the following tools from Sourceforge:
-   * [[http://sourceforge.net/projects/docx2txt/][docx2txt]] for =.docx=
-   * [[http://sourceforge.net/projects/pptx2txt/][pptx2txt]] for =.pptx=
+
+   * =docx2txt= for =.docx=
+   * =pptx2txt= for =.pptx=
+   * =xls2txt= for =.xls=
    * CPAN:Spreadsheet::XLSX for =.xlsx=
 
 Then set the command path to these tools in =configure=.
@@ -125,12 +135,11 @@ All the stringifiers have unit tests associated with them, and we would
 encourage you to provide unit tests for any you wish to contribute. See
 Foswiki:Development/UnitTests for more information on unit testing.
 
-See Foswiki:Tasks/StringifierContrib for currently open tasks.
-
 ---++ Dependencies
 %$DEPENDENCIES%
 
 ---++ Change History
+|  01 Oct 2015: | (4.10) don't default to pass-through for non-supported document types; fixed unit tests |
 |  29 Sep 2015: | (4.00) added unicode support with Foswiki > 2.0 | 
 |  22 Jul 2015: | (3.10) added support for stringification of ppt using catdoc as ppthtml isn't available on some distros |
 |  29 Aug 2014: | (3.00) added support for stringification using open/libreoffice |
@@ -143,13 +152,12 @@ See Foswiki:Tasks/StringifierContrib for currently open tasks.
 |  12 Feb 2010: | robust parsing of password protected XLS files |
 |  02 Oct 2009: | extracted from Foswiki:Extensions/KinoSearchContrib (MD) |
 
-
 %META:FORM{name="PackageForm"}%
 %META:FIELD{name="Author" title="Author" value="Foswiki:Main.MarkusHesse, Foswiki:Main.SvenDowideit, Foswiki:Main.MichaelDaum & Foswiki:Main.AndrewJones"}%
 %META:FIELD{name="Copyright" title="Copyright" value="&copy; 2007, Foswiki:Main.MarkusHesse; &copy; 2009-2015, Foswiki Contributors"}%
 %META:FIELD{name="Description" title="Description" value="%25$SHORTDESCRIPTION%25"}%
 %META:FIELD{name="Home" title="Home" value="Foswiki:Extensions/%TOPIC%"}%
-%META:FIELD{name="License" title="License" value=""}%
+%META:FIELD{name="License" title="License" value="GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]])"}%
 %META:FIELD{name="Release" title="Release" value="%$RELEASE%"}%
 %META:FIELD{name="Repository" title="Repository" value="https://github.com/foswiki/%TOPIC%"}%
 %META:FIELD{name="Support" title="Support" value="Foswiki:Support/%TOPIC%"}%

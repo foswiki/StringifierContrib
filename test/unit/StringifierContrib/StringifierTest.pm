@@ -9,7 +9,9 @@ use Encode ();
 sub encode {
   my ($this, $string) = @_;
 
-  return Encode::encode($Foswiki::cfg{Site}{CharSet}, $string);
+  $string = Encode::encode($Foswiki::cfg{Site}{CharSet}, $string) unless $Foswiki::UNICODE;
+
+  return $string;
 }
 
 1;

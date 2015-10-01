@@ -29,16 +29,19 @@ if (__PACKAGE__->_programExists($pdftotext)){
 }
 
 sub stringForFile {
-  my ($self, $filename) = @_;
+    my ( $self, $filename ) = @_;
 
-  my $cmd = $pdftotext . ' %FILENAME|F% -enc UTF-8 -nopgbrk -q -'; 
-  my ($text, $exit) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $filename);
+    my $cmd = $pdftotext . ' %FILENAME|F% -enc UTF-8 -nopgbrk -q -';
+    my ( $text, $exit ) =
+      Foswiki::Sandbox->sysCommand( $cmd, FILENAME => $filename );
 
-  return '' unless ($exit == 0);
+    return '' unless ( $exit == 0 );
 
-  $text =~ s///g; # remove any page break leftover
+    $text = $self->decode($text);
+    $text =~ s///g;    # remove any page break leftover
+    $text =~ s/^\s+|\s+$//g;
 
-  return $text;
+    return $text;
 }
 
 1;

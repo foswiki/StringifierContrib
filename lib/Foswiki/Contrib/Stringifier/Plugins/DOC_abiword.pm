@@ -50,7 +50,8 @@ sub stringForFile {
     my $text = <$in>;
     close($in);
 
-    unlink($tmp_file);
+    $text = $self->decode($text);
+    $text =~ s/^\s+|\s+$//g;
 
     return $text;
 }

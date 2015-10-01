@@ -51,6 +51,9 @@ sub stringForFile {
 
     my $text = Foswiki::Func::readFile($txtFile);
 
+    $text = $self->decode($text);
+    $text =~ s/^\s+|\s+$//g;
+
     return $text;
 }
 

@@ -34,18 +34,14 @@ sub stringFor {
 
   return unless -r $filename;
   my $mime = mmagic->checktype_filename($filename);
-  my $self = $class->handler_for($filename, $mime)->new();
+  my $impl = $class->handler_for($filename, $mime);
 
-  #print STDERR "file $filename is a $mime ... using $self\n";
+  #print STDERR "file $filename is a $mime ... using ".($impl||'undef')."\n";
+  return unless $impl;
 
-  my $text = $self->stringForFile($filename);
+  my $plugin = $impl->new();
 
-  $text = $self->decode($text);
-
-  $text =~ s/^\s+//;
-  $text =~ s/\s+$//;
-
-  return $text;
+  return $plugin->stringForFile($filename);
 }
 
 

@@ -38,14 +38,17 @@ sub stringForFile {
     my ($self, $file) = @_;
 
     my $cmd = $catdoc . ' %FILENAME|F%';
-    my ($output, $exit, $error) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $file);
+    my ($text, $exit, $error) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $file);
     
     if ($exit) {
       print STDERR "ERROR: $catdoc returned with code $exit - $error\n";
       return "";
     }
 
-    return $output;
+    $text = $self->decode($text);
+    $text =~ s/^\s+|\s+$//g;
+
+    return $text;
 }
 
 1;

@@ -33,7 +33,9 @@ sub stringForFile {
     my $cmd = $html2text . ' -nobs %FILENAME|F%';
     my ($text, $exit) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $filename);
 
+    $text = $self->decode($text);
     $text =~ s/<\?xml.*?\?>\s*//g;
+    $text =~ s/^\s+|\s+$//g;
 
     return $text;
 }

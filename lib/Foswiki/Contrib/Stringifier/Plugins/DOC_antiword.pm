@@ -37,6 +37,9 @@ sub stringForFile {
     my ($text, $exit) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $file);
 
     return '' unless ($exit == 0);
+
+    $text = $self->decode($text);
+    $text =~ s/^\s+|\s+$//g;
     
     return $text;
 }

@@ -20,16 +20,13 @@ use warnings;
 use Foswiki::Contrib::Stringifier::Base ();
 our @ISA = qw( Foswiki::Contrib::Stringifier::Base );
 
-# Note: I need not do any register, because I am the default handler for stringification!
-
-use Encode::Guess ();
+__PACKAGE__->register_handler("text/plain", ".txt", ".css", ".js", ".log");
 
 sub stringForFile {
     my ( $self, $file ) = @_;
     my $in;
 
-    # check it is a text file
-    return '' unless ( -e $file );
+    return '' unless -e $file;
 
     open($in, $file) or return "";
     local $/ = undef;    # set to read to EOF
@@ -37,6 +34,9 @@ sub stringForFile {
     close($in);
 
     $text =~ s/^\?//; # remove bom
+
+    $text = $self->decode($text);
+    $text =~ s/^\s+|\s+$//g;
     
     return $text;
 }

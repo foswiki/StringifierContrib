@@ -38,6 +38,9 @@ sub stringForFile {
 
     return '' unless ($exit == 0);
 
+    $text = $self->decode($text);
+    $text =~ s/^\s+|\s+$//g;
+
     return $text;
 }
 
