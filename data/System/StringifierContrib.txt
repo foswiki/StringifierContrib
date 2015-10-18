@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="ProjectContributor" date="1443690574" format="1.1" version="1"}%
+%META:TOPICINFO{author="ProjectContributor" date="1445161237" format="1.1" version="1"}%
 ---+!! StringifierContrib
 %FORMFIELD{"Description"}%
 
@@ -51,7 +51,7 @@ To index Word Documents (=.doc=) you will need to install one of the following:
 
 ---++ Backend for PDF
 
-To index =.pdf= files you need to install =proppler-utils=.
+To index =.pdf= files you need to install =poppler-utils=.
 
 ---++ Backend for PPT
 
@@ -139,6 +139,7 @@ Foswiki:Development/UnitTests for more information on unit testing.
 %$DEPENDENCIES%
 
 ---++ Change History
+|  18 Oct 2015: | (4.20) removed dependency on File::MMagic; now using extension-based mime detection |
 |  01 Oct 2015: | (4.10) don't default to pass-through for non-supported document types; fixed unit tests |
 |  29 Sep 2015: | (4.00) added unicode support with Foswiki > 2.0 | 
 |  22 Jul 2015: | (3.10) added support for stringification of ppt using catdoc as ppthtml isn't available on some distros |

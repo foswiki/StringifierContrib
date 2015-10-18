@@ -11,7 +11,7 @@
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details, published at 
+# GNU General Public License for more details, published at
 # http://www.gnu.org/copyleft/gpl.html
 
 package Foswiki::Contrib::Stringifier;
@@ -19,21 +19,42 @@ package Foswiki::Contrib::Stringifier;
 use strict;
 use warnings;
 
+use Foswiki::Func ();
 use Foswiki::Contrib::Stringifier::Base;
 our @ISA = qw( Foswiki::Contrib::Stringifier::Base );
-use File::MMagic();
 
-our $mmagic;
-sub mmagic {
-  $mmagic = File::MMagic->new() unless $mmagic;
-  return $mmagic;
+our $types;
+sub _getMimeType {
+  my $fileName = shift;
+
+  my $mimeType;
+
+  if ($fileName && $fileName =~ /\.([^.]+)$/) {
+    my $suffix = $1;
+
+    unless ($types) {
+      $types = Foswiki::Func::readFile($Foswiki::cfg{MimeTypesFileName});
+    }
+
+    if ($types =~ /^([^#]\S*).*?\s$suffix(?:\s|$)/im) {
+      $mimeType = $1;
+    }
+  }
+
+  return $mimeType;
 }
+
+
 
 sub stringFor {
   my ($class, $filename) = @_;
 
   return unless -r $filename;
-  my $mime = mmagic->checktype_filename($filename);
+  my $mime = _getMimeType($filename);
+
+  #print STDERR "no mime for $filename\n" unless $mime;
+  return unless $mime;
+
   my $impl = $class->handler_for($filename, $mime);
 
   #print STDERR "file $filename is a $mime ... using ".($impl||'undef')."\n";
@@ -43,6 +64,7 @@ sub stringFor {
 
   return $plugin->stringForFile($filename);
 }
+
 
 
 1;
