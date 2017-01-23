@@ -139,6 +139,7 @@ Foswiki:Development/UnitTests for more information on unit testing.
 %$DEPENDENCIES%
 
 ---++ Change History
+|  23 Jan 2017: | (4.30) added stringifier to index XLS using soffice |
 |  18 Oct 2015: | (4.20) removed dependency on File::MMagic; now using extension-based mime detection |
 |  01 Oct 2015: | (4.10) don't default to pass-through for non-supported document types; fixed unit tests |
 |  29 Sep 2015: | (4.00) added unicode support with Foswiki > 2.0 | 
@@ -155,7 +156,7 @@ Foswiki:Development/UnitTests for more information on unit testing.
 
 %META:FORM{name="PackageForm"}%
 %META:FIELD{name="Author" title="Author" value="Foswiki:Main.MarkusHesse, Foswiki:Main.SvenDowideit, Foswiki:Main.MichaelDaum & Foswiki:Main.AndrewJones"}%
-%META:FIELD{name="Copyright" title="Copyright" value="&copy; 2007, Foswiki:Main.MarkusHesse; &copy; 2009-2015, Foswiki Contributors"}%
+%META:FIELD{name="Copyright" title="Copyright" value="&copy; 2007, Foswiki:Main.MarkusHesse; &copy; 2009-2017, Foswiki Contributors"}%
 %META:FIELD{name="Description" title="Description" value="%25$SHORTDESCRIPTION%25"}%
 %META:FIELD{name="Home" title="Home" value="Foswiki:Extensions/%TOPIC%"}%
 %META:FIELD{name="License" title="License" value="GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]])"}%

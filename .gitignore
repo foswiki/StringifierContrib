@@ -1,8 +1,8 @@
 *.swp
-StringifierContrib.md5
-StringifierContrib.sha1
-StringifierContrib.tgz
-StringifierContrib.txt
-StringifierContrib.zip
-StringifierContrib_installer
-StringifierContrib_installer.pl
+/StringifierContrib.md5
+/StringifierContrib.sha1
+/StringifierContrib.tgz
+/StringifierContrib.txt
+/StringifierContrib.zip
+/StringifierContrib_installer
+/StringifierContrib_installer.pl

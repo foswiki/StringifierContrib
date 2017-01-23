@@ -1,4 +1,4 @@
-# Copyright (C) 2011-2015 Foswiki Contributors
+# Copyright (C) 2011-2017 Foswiki Contributors
 #
 # For licensing info read LICENSE file in the Foswiki root.
 # This program is free software; you can redistribute it and/or

@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2015 Foswiki Contributors
+# Copyright (C) 2009-2017 Foswiki Contributors
 #
 # For licensing info read LICENSE file in the Foswiki root.
 # This program is free software; you can redistribute it and/or
@@ -53,6 +53,9 @@ __PACKAGE__->plugins;
     # if it wants to register or not.
     sub _programExists {
 	my ($self, $program) = @_;
+
+        # work around a bug in old File::Which that doesn't like absolute paths
+        return $program if -f $program; 
 
 	my $path = File::Which::which($program);
         return defined $path;

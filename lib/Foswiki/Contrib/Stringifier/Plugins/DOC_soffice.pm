@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2015 Foswiki Contributors
+# Copyright (C) 2009-2017 Foswiki Contributors
 #
 # For licensing info read LICENSE file in the Foswiki root.
 # This program is free software; you can redistribute it and/or
@@ -28,7 +28,7 @@ my $soffice = $Foswiki::cfg{StringifierContrib}{sofficeCmd} || '/usr/bin/soffice
 
 if (defined($Foswiki::cfg{StringifierContrib}{WordIndexer}) && 
     ($Foswiki::cfg{StringifierContrib}{WordIndexer} eq 'soffice')) {
-    if (-f $soffice){
+    if (__PACKAGE__->_programExists($soffice)) {
         __PACKAGE__->register_handler("application/word", ".doc", "text/docx", ".docx");
     }
 }

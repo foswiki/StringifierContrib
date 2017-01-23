@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2015 Foswiki Contributors
+# Copyright (C) 2009-2017 Foswiki Contributors
 #
 # For licensing info read LICENSE file in the Foswiki root.
 # This program is free software; you can redistribute it and/or
@@ -26,18 +26,17 @@ use File::Basename qw(basename);
 
 my $soffice = $Foswiki::cfg{StringifierContrib}{sofficeCmd} || '/usr/bin/soffice';
 
-if (defined($Foswiki::cfg{StringifierContrib}{PowerpointIndexer})
-  && $Foswiki::cfg{StringifierContrib}{PowerpointIndexer} eq 'soffice')
+if ((!defined($Foswiki::cfg{StringifierContrib}{PowerpointIndexer}) || $Foswiki::cfg{StringifierContrib}{PowerpointIndexer} eq 'soffice')
+  && __PACKAGE__->_programExists($soffice))
 {
-  if (-f $soffice) {
-    __PACKAGE__->register_handler("text/ppt", ".ppt", "text/pptx", ".pptx");
-  }
+  __PACKAGE__->register_handler("text/ppt", ".ppt", "text/pptx", ".pptx");
 }
+
 
 sub stringForFile {
     my ($self, $file) = @_;
     my $tmpDir = File::Temp->newdir();
-    
+
     # first convert to pdf as the thing can't do txt:Text directly as reliably
     my $cmd = $soffice . ' --convert-to pdf --invisible --headless --minimized --outdir %OUTDIR|F% %FILENAME|F%';
 

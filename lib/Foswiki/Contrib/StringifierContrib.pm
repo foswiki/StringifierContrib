@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 #
-# Copyright (C) 2009-2015 Foswiki Contributors
+# Copyright (C) 2009-2017 Foswiki Contributors
 #
 # For licensing info read LICENSE file in the Foswiki root.
 # This program is free software; you can redistribute it and/or
@@ -18,8 +18,8 @@ package Foswiki::Contrib::StringifierContrib;
 use strict;
 use warnings;
 
-our $VERSION = '4.20';
-our $RELEASE = '18 Oct 2015';
+our $VERSION = '4.30';
+our $RELEASE = '23 Jan 2017';
 our $SHORTDESCRIPTION = 'Helper library to stringify binary document formats';
 our $NO_PREFS_IN_TOPIC = 1;
 

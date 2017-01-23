@@ -12,43 +12,46 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 
-package Foswiki::Contrib::Stringifier::Plugins::PPT;
+package Foswiki::Contrib::Stringifier::Plugins::XLS_soffice;
 
 use strict;
 use warnings;
 
 use Foswiki::Contrib::Stringifier::Base ();
 our @ISA = qw( Foswiki::Contrib::Stringifier::Base );
-use Foswiki::Contrib::Stringifier  ();
-use File::Temp qw/tempfile/;
 
-my $ppthtml = $Foswiki::cfg{StringifierContrib}{ppthtmlCmd} || 'ppthtml';
+use Foswiki::Func ();
+use File::Temp ();
+use File::Basename qw(basename);
 
-if ((!defined($Foswiki::cfg{StringifierContrib}{PowerpointIndexer}) || $Foswiki::cfg{StringifierContrib}{PowerpointIndexer} eq 'script')
-  && __PACKAGE__->_programExists($ppthtml))
-{
-  __PACKAGE__->register_handler("text/ppt", ".ppt");
+my $soffice = $Foswiki::cfg{StringifierContrib}{sofficeCmd} || '/usr/bin/soffice';
+
+if (defined($Foswiki::cfg{StringifierContrib}{ExcelIndexer}) && 
+    ($Foswiki::cfg{StringifierContrib}{ExcelIndexer} eq 'soffice')) {
+    if (__PACKAGE__->_programExists($soffice)) {
+        __PACKAGE__->register_handler("application/excel", ".xls");
+    }
 }
 
 sub stringForFile {
-    my ($self, $filename) = @_;
+    my ($self, $file) = @_;
+    my $tmpDir = File::Temp->newdir();
     
-    # First I convert PPT to HTML
-    my $cmd = $ppthtml . ' %FILENAME|F%';
-    my ($output, $exit, $error) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $filename);
+    my $cmd = $soffice . ' --convert-to html --invisible --headless --minimized --outdir %OUTDIR|F% %FILENAME|F%';
 
-    if ($exit) {
-      print STDERR "Eror: $ppthtml - $error\n";
-      return "";
-    }
+    my ($data, $exit) = Foswiki::Sandbox->sysCommand(
+        $cmd,
+        OUTDIR => $tmpDir->dirname,
+        FILENAME  => $file,
+    );
 
-    # put the html into a temporary file
-    my ($fh, $tmpFile) = tempfile();
-    print $fh $output;
+    return '' unless ($exit == 0);
 
-    # use the HTML stringifier to convert HTML to TXT
     my $stringifier = Foswiki::Contrib::Stringifier::Plugins::HTML->new();
+    my $tmpFile = $tmpDir->dirname . '/' . basename($file, ".xls", ".xlsx") . '.html';
+
     return $stringifier->stringForFile($tmpFile);
 }
 
 1;
+

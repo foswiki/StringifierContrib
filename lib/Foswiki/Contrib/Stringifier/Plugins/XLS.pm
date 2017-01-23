@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2015 Foswiki Contributors
+# Copyright (C) 2009-2017 Foswiki Contributors
 #
 # For licensing info read LICENSE file in the Foswiki root.
 # This program is free software; you can redistribute it and/or
@@ -22,9 +22,12 @@ our @ISA = qw( Foswiki::Contrib::Stringifier::Base );
 
 my $xls2txt = $Foswiki::cfg{StringifierContrib}{xls2txtCmd} || 'xls2txt.pl';
 
-# Only if xls2txt.pl exists, I register myself.
-if (__PACKAGE__->_programExists($xls2txt)){
+if (defined($Foswiki::cfg{StringifierContrib}{ExcelIndexer})
+  && ($Foswiki::cfg{StringifierContrib}{ExcelIndexer} eq 'script'))
+{
+  if (__PACKAGE__->_programExists($xls2txt)) {
     __PACKAGE__->register_handler("application/excel", ".xls");
+  }
 }
 
 sub stringForFile {

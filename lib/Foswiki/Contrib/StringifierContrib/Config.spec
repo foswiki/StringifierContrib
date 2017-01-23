@@ -1,7 +1,7 @@
 # ---+ Extensions
 # ---++ StringifierContrib
 
-# **SELECT abiword, antiword, catdoc, soffice, wv **
+# **SELECT abiword, antiword, catdoc, soffice, wv, none **
 # Select which MS Word indexer to use (you need to have antiword, abiword or wvText installed)
 # <dl>
 # <dt>abiword</dt><dd></dd>
@@ -9,17 +9,28 @@
 # <dt>catdoc</dt><dd></dd>
 # <dt>soffice</dt><dd>is the most capable of all converters but may be slow</dd>
 # <dt>wvText</dt><dd>is the default</dd>
+# <dt>none</dt><dd>don't index word documents</dd>
 # </dl>
 $Foswiki::cfg{StringifierContrib}{WordIndexer} = 'antiword';
 
-# **SELECT catppt,script,soffice**
+# **SELECT catppt,script,soffice, none**
 # Select which indexer to use to extract the text of a Powerpoint file (ppt, pptx) 
 # <dl>
 # <dt>catppt</dt><dd>is the default</dd>
 # <dt>script</dt><dd>uses ppthtml </dd>
 # <dt>soffice</dt><dd>is the most capable of all converters but may be slow</dd>
+# <dt>none</dt><dd>don't index powerpoint documents</dd>
 # </dl>
 $Foswiki::cfg{StringifierContrib}{PowerpointIndexer} = 'script';
+
+# **SELECT script,soffice, none**
+# Select which indexer to use to extract the text of an XLS file
+# <dl>
+# <dt>script</dt><dd>default </dd>
+# <dt>soffice</dt><dd>is the most capable of all converters but may be slow</dd>
+# <dt>none</dt><dd>don't index excel documents</dd>
+# </dl>
+$Foswiki::cfg{StringifierContrib}{ExcelIndexer} = 'script';
 
 # **COMMAND**
 # Path to your abiword command (used to convert MS word documents: .doc)
