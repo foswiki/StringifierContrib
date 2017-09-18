@@ -18,8 +18,8 @@ package Foswiki::Contrib::StringifierContrib;
 use strict;
 use warnings;
 
-our $VERSION = '4.30';
-our $RELEASE = '23 Jan 2017';
+our $VERSION = '4.40';
+our $RELEASE = '30 Jan 2017';
 our $SHORTDESCRIPTION = 'Helper library to stringify binary document formats';
 our $NO_PREFS_IN_TOPIC = 1;
 

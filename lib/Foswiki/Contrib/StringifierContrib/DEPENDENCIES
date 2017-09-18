@@ -1,7 +1,7 @@
 File::Which,>0,cpan,Required
 Module::Pluggable,>0,cpan,Required
 Spreadsheet::ParseExcel,>0,cpan,Required for =.xls= files
-Spreadsheet::XLSX,>0,cpan,Required for =.xlsx= files
+Spreadsheet::XLSX,>0,cpan,One of Spreadsheet::ParseXLSX or xlsx2csv is required for =.xlsx files
 Encode,>0,cpan,Required
 Error,>0,cpan,Required
 catdoc,>0,c,Optional
@@ -11,5 +11,7 @@ soffice,>0,c,One of antiword, abiword, soffice or wvWare is required for =.doc= 
 antiword,>0,c,One of antiword, abiword, soffice or wvWare is required for =.doc= files
 abiword,>0,c,One of antiword, abiword, soffice or wvWare is required for =.doc= files
 wvWare,>0,c,One of antiword, abiword, soffice or wvWare is required for =.doc= files
-html2text,>0,c,Required for indexing html files
+html2text,>0,c,One of html2text or lynx for indexing html files
+lynx,>0,c,One of html2text or lynx for indexing html files
 odt2txt,>0,c,Required for indexing OpenDocument and StarOffice documents
+xlsx2csv,>0,c,One of Spreadsheet::ParseXLSX or xlsx2csv is required for =.xlsx files

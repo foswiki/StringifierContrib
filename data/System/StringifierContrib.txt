@@ -10,27 +10,28 @@ by full-text search engines such as Foswiki:Extensions/KinoSearchContrib or Fosw
 
 It supports all major office document formats such as:
 
-   * =.html=
-   * =.xml=
    * =.doc=
    * =.docx=
-   * =.xls=
-   * =.xlsx=
+   * =.html=
+   * =.odp=
+   * =.ods=
+   * =.odt=
+   * =.otp=
+   * =.ots=
+   * =.ott=
+   * =.pdf=
    * =.ppt=
    * =.pptx=
-   * =.pdf=
-   * =.odt=
-   * =.ott=
-   * =.odp=
-   * =.otp=
-   * =.ods=
-   * =.ots=
-   * =.sxw=
+   * =.stc=
+   * =.sti=
    * =.stw=
    * =.sxc=
-   * =.stc=
    * =.sxi=
-   * =.sti=
+   * =.sxw=
+   * =.txt=
+   * =.xls=
+   * =.xlsx=
+   * =.xml=
 
 %TOPIC% is organized in plugins to serialization a document format by delegating it to according backends.
 For some formats there are alternative backends to chose from. For example a DOC file can be serialized 
@@ -139,6 +140,8 @@ Foswiki:Development/UnitTests for more information on unit testing.
 %$DEPENDENCIES%
 
 ---++ Change History
+|  18 Sep 2017: | (5.00) make html-to-text converter pluggable |
+|  31 Jan 2017: | (4.40) improved XLSX stringifier |
 |  23 Jan 2017: | (4.30) added stringifier to index XLS using soffice |
 |  18 Oct 2015: | (4.20) removed dependency on File::MMagic; now using extension-based mime detection |
 |  01 Oct 2015: | (4.10) don't default to pass-through for non-supported document types; fixed unit tests |

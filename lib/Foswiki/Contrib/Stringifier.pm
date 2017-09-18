@@ -44,20 +44,22 @@ sub _getMimeType {
   return $mimeType;
 }
 
-
-
 sub stringFor {
-  my ($class, $filename) = @_;
+  my ($class, $filename, $mime) = @_;
 
   return unless -r $filename;
-  my $mime = _getMimeType($filename);
+  $mime = _getMimeType($filename) unless defined $mime;
 
-  #print STDERR "no mime for $filename\n" unless $mime;
+  if ($Foswiki::cfg{StringifierContrib}{Debug}) {
+    print STDERR "StringifierContrib - no mime for $filename\n" unless $mime;
+  }
   return unless $mime;
 
   my $impl = $class->handler_for($filename, $mime);
 
-  #print STDERR "file $filename is a $mime ... using ".($impl||'undef')."\n";
+  if ($Foswiki::cfg{StringifierContrib}{Debug}) {
+    print STDERR "file $filename is a $mime ... using ".($impl||'undef')."\n";
+  }
   return unless $impl;
 
   my $plugin = $impl->new();

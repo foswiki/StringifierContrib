@@ -12,7 +12,7 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 
-package Foswiki::Contrib::Stringifier::Plugins::HTML;
+package Foswiki::Contrib::Stringifier::Plugins::HTML_lynx;
 
 use strict;
 use warnings;
@@ -20,9 +20,13 @@ use warnings;
 use Foswiki::Contrib::Stringifier::Base ();
 our @ISA = qw( Foswiki::Contrib::Stringifier::Base );
 
-my $html2text = $Foswiki::cfg{StringifierContrib}{htmltotextCmd} || 'html2text';
+my $lynxCmd = $Foswiki::cfg{StringifierContrib}{lynxCmd} || 'lynx';
 
-__PACKAGE__->register_handler("text/html", ".html");
+if (defined($Foswiki::cfg{StringifierContrib}{HtmlIndexer}) && $Foswiki::cfg{StringifierContrib}{HtmlIndexer} eq 'lynx'
+  && __PACKAGE__->_programExists($lynxCmd))
+{
+  __PACKAGE__->register_handler("text/html", ".html");
+}
 
 sub stringForFile {
     my ($self, $filename) = @_;
@@ -30,7 +34,9 @@ sub stringForFile {
     # check it is a text file
     return '' unless ( -e $filename );
 
-    my $cmd = $html2text . ' -nobs %FILENAME|F%';
+    my $cmd = $lynxCmd;
+    $cmd .= " -dump %FILENAME|F%" unless $cmd =~ /%FILENAME\|F%/; 
+
     my ($text, $exit) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $filename);
 
     $text = $self->decode($text);

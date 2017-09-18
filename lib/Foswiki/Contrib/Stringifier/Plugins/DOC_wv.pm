@@ -21,7 +21,7 @@ use Foswiki::Contrib::Stringifier::Base ();
 use Foswiki::Contrib::Stringifier ();
 
 our @ISA = qw( Foswiki::Contrib::Stringifier::Base );
-use File::Temp qw/tmpnam/;
+use File::Temp ();
 
 my $wvText = $Foswiki::cfg{StringifierContrib}{wvTextCmd} || 'wvText';
 
@@ -37,20 +37,18 @@ if (defined($Foswiki::cfg{StringifierContrib}{WordIndexer}) &&
 sub stringForFile {
     my ($self, $file) = @_;
 
-    my $tmp_file = tmpnam() . ".txt";
+    my $tmpFile = File::Temp->new(SURFIX => ".txt");
     
     my $cmd = $wvText . ' %FILENAME|F% %TMPFILE|F%';
-    my ($output, $exit) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $file, TMPFILE => $tmp_file);
+    my ($output, $exit) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $file, TMPFILE => $tmpFile->filename);
     
     return '' unless ($exit == 0);
 
     my $in;
-    open($in, $tmp_file) or return "";
+    open($in, $tmpFile) or return "";
     local $/ = undef;    # set to read to EOF
     my $text = <$in>;
     close($in);
-
-    unlink($tmp_file);
 
     $text = $self->decode($text);
     $text =~ s/^\s+|\s+$//g;

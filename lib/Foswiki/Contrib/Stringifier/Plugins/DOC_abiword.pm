@@ -19,7 +19,7 @@ use warnings;
 
 use Foswiki::Contrib::Stringifier::Base ();
 our @ISA = qw( Foswiki::Contrib::Stringifier::Base );
-use File::Temp qw/tmpnam/;
+use File::Temp ();
 
 my $abiword = $Foswiki::cfg{StringifierContrib}{abiwordCmd} || 'abiword';
 
@@ -34,10 +34,10 @@ if (defined($Foswiki::cfg{StringifierContrib}{WordIndexer}) &&
 
 sub stringForFile {
     my ($self, $file) = @_;
-    my $tmp_file = tmpnam() . ".txt";
+    my $tmpFile = File::Temp->new(SUFFIX =>".txt");
     
     my $cmd = $abiword . ' --to=%TMPFILE|F% %FILENAME|F%';
-    my ($output, $exit, $error) = Foswiki::Sandbox->sysCommand($cmd, TMPFILE => $tmp_file, FILENAME => $file);
+    my ($output, $exit, $error) = Foswiki::Sandbox->sysCommand($cmd, TMPFILE => $tmpFile->filename, FILENAME => $file);
 
     if ($exit) {
       print STDERR "ERROR: $abiword returned with code $exit - $error\n";
@@ -45,7 +45,7 @@ sub stringForFile {
     }
 
     my $in;
-    open($in, $tmp_file) or return "";
+    open($in, $tmpFile) or return "";
     local $/ = undef;    # set to read to EOF
     my $text = <$in>;
     close($in);

@@ -20,7 +20,7 @@ use warnings;
 use Foswiki::Contrib::Stringifier::Base ();
 our @ISA = qw( Foswiki::Contrib::Stringifier::Base );
 use Foswiki::Contrib::Stringifier  ();
-use File::Temp qw/tempfile/;
+use File::Temp ();
 
 my $ppthtml = $Foswiki::cfg{StringifierContrib}{ppthtmlCmd} || 'ppthtml';
 
@@ -38,17 +38,16 @@ sub stringForFile {
     my ($output, $exit, $error) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $filename);
 
     if ($exit) {
-      print STDERR "Eror: $ppthtml - $error\n";
+      print STDERR "EROR: $ppthtml - $error\n";
       return "";
     }
 
     # put the html into a temporary file
-    my ($fh, $tmpFile) = tempfile();
-    print $fh $output;
+    my $tmpFile = File::Temp->new(SUFFIX=>".html");
+    binmode($tmpFile, ":utf8");
+    print $tmpFile $output;
 
-    # use the HTML stringifier to convert HTML to TXT
-    my $stringifier = Foswiki::Contrib::Stringifier::Plugins::HTML->new();
-    return $stringifier->stringForFile($tmpFile);
+    return Foswiki::Contrib::Stringifier->stringFor($tmpFile->filename, "text/html");
 }
 
 1;

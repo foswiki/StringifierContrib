@@ -12,39 +12,35 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 
-package Foswiki::Contrib::Stringifier::Plugins::DOC_catdoc;
+package Foswiki::Contrib::Stringifier::Plugins::HTML_html2text;
 
 use strict;
 use warnings;
 
 use Foswiki::Contrib::Stringifier::Base ();
-use Foswiki::Contrib::Stringifier ();
-
 our @ISA = qw( Foswiki::Contrib::Stringifier::Base );
 
-my $catdoc = $Foswiki::cfg{StringifierContrib}{catdocCmd} || 'catdoc';
+my $html2textCmd = $Foswiki::cfg{StringifierContrib}{html2textCmd} || 'html2text';
 
-if (defined($Foswiki::cfg{StringifierContrib}{WordIndexer}) &&
-    ($Foswiki::cfg{StringifierContrib}{WordIndexer} eq 'catdoc')) {
-    # Only if wv exists, I register myself.
-    if (__PACKAGE__->_programExists($catdoc)){
-        __PACKAGE__->register_handler("application/word", ".doc");
-    }
+if ((!defined($Foswiki::cfg{StringifierContrib}{HtmlIndexer}) || $Foswiki::cfg{StringifierContrib}{HtmlIndexer} eq 'html2text')
+  && __PACKAGE__->_programExists($html2textCmd))
+{
+  __PACKAGE__->register_handler("text/html", ".html");
 }
 
-
 sub stringForFile {
-    my ($self, $file) = @_;
-
-    my $cmd = $catdoc . ' %FILENAME|F%';
-    my ($text, $exit, $error) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $file);
+    my ($self, $filename) = @_;
     
-    if ($exit) {
-      print STDERR "ERROR: $catdoc returned with code $exit - $error\n";
-      return "";
-    }
+    # check it is a text file
+    return '' unless ( -e $filename );
+
+    my $cmd = $html2textCmd;
+    $cmd .= " -nobs -utf8 %FILENAME|F%" unless $cmd =~ /%FILENAME\|F%/; 
+
+    my ($text, $exit) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $filename);
 
     $text = $self->decode($text);
+    $text =~ s/<\?xml.*?\?>\s*//g;
     $text =~ s/^\s+|\s+$//g;
 
     return $text;

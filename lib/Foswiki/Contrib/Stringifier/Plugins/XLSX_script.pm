@@ -12,7 +12,7 @@
 #
 # For licensing info read LICENSE file in the Foswiki root.
 
-package Foswiki::Contrib::Stringifier::Plugins::XLSX;
+package Foswiki::Contrib::Stringifier::Plugins::XLSX_script;
 
 use strict;
 use warnings;
@@ -20,12 +20,12 @@ use warnings;
 use Foswiki::Contrib::Stringifier::Base ();
 our @ISA = qw( Foswiki::Contrib::Stringifier::Base );
 
-my $xlsx2csv = $Foswiki::cfg{StringifierContrib}{xlsx2csv} || 'xlsx2csv';
+my $xlsx2txt = $Foswiki::cfg{StringifierContrib}{xlsx2txtCmd} || 'xlsx2txt.pl';
 
 if (defined($Foswiki::cfg{StringifierContrib}{Excel2Indexer})
-  && ($Foswiki::cfg{StringifierContrib}{Excel2Indexer} eq 'xlsx2csv'))
+  && ($Foswiki::cfg{StringifierContrib}{Excel2Indexer} eq 'script'))
 {
-  if (__PACKAGE__->_programExists($xlsx2csv)) {
+  if (__PACKAGE__->_programExists($xlsx2txt)) {
     __PACKAGE__->register_handler("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ".xlsx");
   }
 }
@@ -33,10 +33,10 @@ if (defined($Foswiki::cfg{StringifierContrib}{Excel2Indexer})
 sub stringForFile {
     my ($self, $filename) = @_;
     
-    my $cmd = $xlsx2csv . ' -i -d tab %FILENAME|F%';
+    my $cmd = $xlsx2txt . ' %FILENAME|F% -';
     my ($text, $exit) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $filename);
-
-    return '' unless $exit == 0;
+    
+    return '' unless ($exit == 0);
 
     $text = $self->decode($text);
     $text =~ s/^\s+|\s+$//g;

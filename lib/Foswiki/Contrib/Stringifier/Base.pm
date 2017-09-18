@@ -39,7 +39,8 @@ __PACKAGE__->plugins;
         }
     }
     sub handler_for {
-        my ($self, $filename, $mime) = @_;
+        my ($this, $filename, $mime) = @_;
+
         if (exists $mime_handlers{$mime}) { return $mime_handlers{$mime} }
 	$filename = lc($filename);
         for my $spec (keys %extension_handlers) {
@@ -52,7 +53,7 @@ __PACKAGE__->plugins;
     # This is as service method that a sub calss can use to decise, 
     # if it wants to register or not.
     sub _programExists {
-	my ($self, $program) = @_;
+	my ($this, $program) = @_;
 
         # work around a bug in old File::Which that doesn't like absolute paths
         return $program if -f $program; 
@@ -64,20 +65,20 @@ __PACKAGE__->plugins;
 
 sub new { 
     my ($handler) = @_;
-    my $self = bless {}, $handler;
+    my $this = bless {}, $handler;
 
-    $self;
+    return $this;
 }
 
 sub decode {
-    my ( $self, $string, $charSet ) = @_;
+    my ( $this, $string, $charSet ) = @_;
 
     $charSet ||= $Foswiki::cfg{Site}{CharSet};
     return Encode::decode( $charSet, $string );
 }
 
 sub encode {
-    my ( $self, $string, $charSet ) = @_;
+    my ( $this, $string, $charSet ) = @_;
 
     $charSet ||= $Foswiki::cfg{Site}{CharSet};
     return Encode::encode( $charSet, $string );

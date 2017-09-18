@@ -85,7 +85,7 @@ while(/<Override PartName="(\/ppt\/notesSlides\/.*?)" ContentType=".*?\/([^\/]*?
 
 
 
-my $command = "$unzip -p $ARGV[0] ";
+my $command = "$unzip -p \"$ARGV[0]\" ";
 foreach (keys %slides) {
         $_ =~ s/^\///;   #get ride of first backslash
         $command .= $_ . " ";
@@ -94,7 +94,6 @@ foreach (keys %slides) {
         $command .=  $noteskey ." "  unless defined $notes{$noteskey};
       } 
 }
-
 
 
 

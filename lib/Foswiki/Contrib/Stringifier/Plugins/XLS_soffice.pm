@@ -32,6 +32,12 @@ if (defined($Foswiki::cfg{StringifierContrib}{ExcelIndexer}) &&
         __PACKAGE__->register_handler("application/excel", ".xls");
     }
 }
+if (defined($Foswiki::cfg{StringifierContrib}{Excel2Indexer}) && 
+    ($Foswiki::cfg{StringifierContrib}{Excel2Indexer} eq 'soffice')) {
+    if (__PACKAGE__->_programExists($soffice)) {
+        __PACKAGE__->register_handler("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ".xlsx");
+    }
+}
 
 sub stringForFile {
     my ($self, $file) = @_;
@@ -47,10 +53,9 @@ sub stringForFile {
 
     return '' unless ($exit == 0);
 
-    my $stringifier = Foswiki::Contrib::Stringifier::Plugins::HTML->new();
     my $tmpFile = $tmpDir->dirname . '/' . basename($file, ".xls", ".xlsx") . '.html';
 
-    return $stringifier->stringForFile($tmpFile);
+    return Foswiki::Contrib::Stringifier->stringFor($tmpFile, "text/html");
 }
 
 1;

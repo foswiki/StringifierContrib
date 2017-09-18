@@ -21,9 +21,10 @@ use File::Spec();
 
 # Set library paths in @INC, at compile time
 BEGIN {
-    my ( $volume, $binDir, $action ) = File::Spec->splitpath(__FILE__);
-    my $setlib = File::Spec->catpath( $volume, $binDir, 'setlib.cfg' );
-    @INC = ( '.', grep { $_ ne '.' } @INC ) unless $binDir;
+    my ( $volume, $currDir, $action ) = File::Spec->splitpath(__FILE__);
+    $currDir .= '/' if $currDir;
+    my $setlib = File::Spec->catpath( $volume, "$currDir../bin", 'setlib.cfg' );
+    @INC = ( '.', grep { $_ ne '.' } @INC ) unless $currDir;
     require $setlib;
 }
 

@@ -1,3 +1,4 @@
+!noci
 data/System/StringifierContrib.txt 0644
 lib/Foswiki/Contrib/Stringifier/Base.pm 0644
 lib/Foswiki/Contrib/StringifierContrib/Config.spec 0644
@@ -9,7 +10,10 @@ lib/Foswiki/Contrib/Stringifier/Plugins/DOC_catdoc.pm 0644
 lib/Foswiki/Contrib/Stringifier/Plugins/DOC_soffice.pm 0644
 lib/Foswiki/Contrib/Stringifier/Plugins/DOC_wv.pm 0644
 lib/Foswiki/Contrib/Stringifier/Plugins/DOCX.pm 0644
-lib/Foswiki/Contrib/Stringifier/Plugins/HTML.pm 0644
+lib/Foswiki/Contrib/Stringifier/Plugins/HTML_html2text.pm 0644
+lib/Foswiki/Contrib/Stringifier/Plugins/HTML_links.pm 0644
+lib/Foswiki/Contrib/Stringifier/Plugins/HTML_lynx.pm 0644
+lib/Foswiki/Contrib/Stringifier/Plugins/HTML_w3m.pm 0644
 lib/Foswiki/Contrib/Stringifier/Plugins/ODT.pm 0644
 lib/Foswiki/Contrib/Stringifier/Plugins/PDF.pm 0644
 lib/Foswiki/Contrib/Stringifier/Plugins/PPT_catdoc.pm 0644
@@ -20,8 +24,10 @@ lib/Foswiki/Contrib/Stringifier/Plugins/Text.pm 0644
 lib/Foswiki/Contrib/Stringifier/Plugins/XLS.pm 0644
 lib/Foswiki/Contrib/Stringifier/Plugins/XLS_soffice.pm 0644
 lib/Foswiki/Contrib/Stringifier/Plugins/XLSX.pm 0644
+lib/Foswiki/Contrib/Stringifier/Plugins/XLSX_script.pm 0644
 lib/Foswiki/Contrib/Stringifier.pm 0644
 tools/docx2txt.pl 0755
 tools/pptx2txt.pl 0755
 tools/stringify 0755
 tools/xls2txt.pl 0755
+tools/xlsx2txt.pl 0755

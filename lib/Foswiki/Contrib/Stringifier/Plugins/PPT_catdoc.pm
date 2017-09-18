@@ -20,7 +20,6 @@ use warnings;
 use Foswiki::Contrib::Stringifier::Base ();
 our @ISA = qw( Foswiki::Contrib::Stringifier::Base );
 use Foswiki::Contrib::Stringifier  ();
-use File::Temp qw/tmpnam/;
 
 my $catppt = $Foswiki::cfg{StringifierContrib}{catpptCmd} || 'catppt';
 
