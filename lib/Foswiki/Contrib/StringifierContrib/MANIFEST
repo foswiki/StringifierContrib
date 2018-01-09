@@ -21,6 +21,7 @@ lib/Foswiki/Contrib/Stringifier/Plugins/PPT.pm 0644
 lib/Foswiki/Contrib/Stringifier/Plugins/PPT_soffice.pm 0644
 lib/Foswiki/Contrib/Stringifier/Plugins/PPTX.pm 0644
 lib/Foswiki/Contrib/Stringifier/Plugins/Text.pm 0644
+lib/Foswiki/Contrib/Stringifier/Plugins/TIF.pm 0644
 lib/Foswiki/Contrib/Stringifier/Plugins/XLS.pm 0644
 lib/Foswiki/Contrib/Stringifier/Plugins/XLS_soffice.pm 0644
 lib/Foswiki/Contrib/Stringifier/Plugins/XLSX.pm 0644

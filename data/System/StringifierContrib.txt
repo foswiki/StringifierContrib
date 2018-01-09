@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="ProjectContributor" date="1445161237" format="1.1" version="1"}%
+%META:TOPICINFO{author="ProjectContributor" date="1515501342" format="1.1" version="1"}%
 ---+!! StringifierContrib
 %FORMFIELD{"Description"}%
 
@@ -28,6 +28,7 @@ It supports all major office document formats such as:
    * =.sxc=
    * =.sxi=
    * =.sxw=
+   * =.tif=
    * =.txt=
    * =.xls=
    * =.xlsx=
@@ -140,6 +141,8 @@ Foswiki:Development/UnitTests for more information on unit testing.
 %$DEPENDENCIES%
 
 ---++ Change History
+%TABLE{columnwidths="7em" tablewidth="100%"}%
+|  09 Jan 2018: | (5.10) added support for tiff documents using tesseract  |
 |  18 Sep 2017: | (5.00) make html-to-text converter pluggable |
 |  31 Jan 2017: | (4.40) improved XLSX stringifier |
 |  23 Jan 2017: | (4.30) added stringifier to index XLS using soffice |
@@ -159,7 +162,7 @@ Foswiki:Development/UnitTests for more information on unit testing.
 
 %META:FORM{name="PackageForm"}%
 %META:FIELD{name="Author" title="Author" value="Foswiki:Main.MarkusHesse, Foswiki:Main.SvenDowideit, Foswiki:Main.MichaelDaum & Foswiki:Main.AndrewJones"}%
-%META:FIELD{name="Copyright" title="Copyright" value="&copy; 2007, Foswiki:Main.MarkusHesse; &copy; 2009-2017, Foswiki Contributors"}%
+%META:FIELD{name="Copyright" title="Copyright" value="&copy; 2007, Foswiki:Main.MarkusHesse; &copy; 2009-2018, Foswiki Contributors"}%
 %META:FIELD{name="Description" title="Description" value="%25$SHORTDESCRIPTION%25"}%
 %META:FIELD{name="Home" title="Home" value="Foswiki:Extensions/%TOPIC%"}%
 %META:FIELD{name="License" title="License" value="GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]])"}%

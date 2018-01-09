@@ -15,3 +15,4 @@ html2text,>0,c,One of html2text or lynx for indexing html files
 lynx,>0,c,One of html2text or lynx for indexing html files
 odt2txt,>0,c,Required for indexing OpenDocument and StarOffice documents
 xlsx2csv,>0,c,One of Spreadsheet::ParseXLSX or xlsx2csv is required for =.xlsx files
+tesseract,>0,c,OCR for tiff files,Optional

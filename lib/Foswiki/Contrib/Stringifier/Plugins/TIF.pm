@@ -12,7 +12,7 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 
-package Foswiki::Contrib::Stringifier::Plugins::XLS;
+package Foswiki::Contrib::Stringifier::Plugins::TIF;
 
 use strict;
 use warnings;
@@ -20,28 +20,25 @@ use warnings;
 use Foswiki::Contrib::Stringifier::Base ();
 our @ISA = qw( Foswiki::Contrib::Stringifier::Base );
 
-my $xls2txt = $Foswiki::cfg{StringifierContrib}{xls2txtCmd} || 'xls2txt.pl';
+my $tesseractCmd = $Foswiki::cfg{StringifierContrib}{tesseractCmd} || 'tesseract';
 
-if (defined($Foswiki::cfg{StringifierContrib}{ExcelIndexer})
-  && ($Foswiki::cfg{StringifierContrib}{ExcelIndexer} eq 'script'))
-{
-  if (__PACKAGE__->_programExists($xls2txt)) {
-    __PACKAGE__->register_handler("application/excel", ".xls");
-  }
+if (__PACKAGE__->_programExists($tesseractCmd)) {
+  __PACKAGE__->register_handler("image/tiff", ".tif", ".tiff");
 }
 
 sub stringForFile {
     my ($self, $filename) = @_;
     
-    my $cmd = $xls2txt . ' %FILENAME|F% -';
+    # check it is a text file
+    return '' unless ( -e $filename );
+
+    my $cmd = $tesseractCmd;
+    $cmd .= " %FILENAME|F% -" unless $cmd =~ /%FILENAME\|F%/; 
+
     my ($text, $exit) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $filename);
-    
-    return '' unless ($exit == 0);
 
-    $text = $self->decode($text);
-    $text =~ s/^\s+|\s+$//g;
-
-    return $text;
+    return $self->decode($text);
 }
 
 1;
+

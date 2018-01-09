@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2017 Foswiki Contributors
+# Copyright (C) 2009-2018 Foswiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License

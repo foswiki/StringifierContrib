@@ -127,6 +127,10 @@ $Foswiki::cfg{StringifierContrib}{xlsx2txtCmd} = '../tools/xlsx2txt.pl';
 # Path to your xlsx2csv command (used to convert MS word documents: .doc)
 $Foswiki::cfg{StringifierContrib}{xlsx2csv} = 'xlsx2csv';
 
+# **COMMAND CHECK='undefok'**
+# Path to tesseract command
+$Foswiki::cfg{StringifierContrib}{tesseractCmd} = 'tesseract';
+
 # ---+++ Charsets
 # **STRING CHECK='undefok' EXPERT**
 # Set this to the charset encoding produced by the soffice helper program. 
