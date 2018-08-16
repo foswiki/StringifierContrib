@@ -196,25 +196,8 @@ $content =~ s{<w:hyperlink r:id="(.*?)".*?>(.*?)</w:hyperlink>}/hyperlink($1,$2)
 $content =~ s/<.*?>//g;
 
 
-#
 # Convert non-ASCII characters/character sequences to ASCII characters.
-#
-
-# $content =~ s/\xE2\x82\xAC/\xC8/og;	# euro symbol as saved by MSOffice
-$content =~ s/\xE2\x82\xAC/E/og;	# euro symbol expressed as E
-
-$content =~ s/\xE2\x80\xA6/.../og;
-$content =~ s/\xE2\x80\xA2/::/og;	# four dot diamond symbol
-$content =~ s/\xE2\x80\x9C/"/og;
-$content =~ s/\xE2\x80\x99/'/og;
-$content =~ s/\xE2\x80\x98/'/og;
-$content =~ s/\xE2\x80\x93/-/og;
-
-$content =~ s/\xC2\xA0//og;
-
-$content =~ s/&amp;/&/ogi;
-$content =~ s/&lt;/</ogi;
-$content =~ s/&gt;/>/ogi;
+$content =~ s/[^[:ascii:]]//g;
 
 
 #

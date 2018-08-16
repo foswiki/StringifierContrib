@@ -20,7 +20,7 @@ use warnings;
 use Foswiki::Contrib::Stringifier::Base ();
 our @ISA = qw( Foswiki::Contrib::Stringifier::Base );
 
-__PACKAGE__->register_handler("text/plain", ".txt", ".css", ".js", ".log");
+__PACKAGE__->register_handler("text/plain", "text/xml", ".xml", ".txt", ".css", ".js", ".log");
 
 sub stringForFile {
     my ( $self, $file ) = @_;

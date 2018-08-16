@@ -142,6 +142,7 @@ Foswiki:Development/UnitTests for more information on unit testing.
 
 ---++ Change History
 %TABLE{columnwidths="7em" tablewidth="100%"}%
+|  16 Aug 2018: | (5.20) register more mime types to the text stringifier |
 |  09 Jan 2018: | (5.10) added support for tiff documents using tesseract  |
 |  18 Sep 2017: | (5.00) make html-to-text converter pluggable |
 |  31 Jan 2017: | (4.40) improved XLSX stringifier |
