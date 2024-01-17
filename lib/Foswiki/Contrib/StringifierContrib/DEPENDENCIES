@@ -1,18 +1,21 @@
-File::Which,>0,cpan,Required
-Module::Pluggable,>0,cpan,Required
-Spreadsheet::ParseExcel,>0,cpan,Required for =.xls= files
-Spreadsheet::XLSX,>0,cpan,One of Spreadsheet::ParseXLSX or xlsx2csv is required for =.xlsx files
+abiword,>0,c,One of antiword, abiword, soffice or wvWare is required for =.doc= files
+antiword,>0,c,One of antiword, abiword, soffice or wvWare is required for =.doc= files
+Archive::Zip,>=0,cpan,Required
+calibre,>3,c,Required for indexing ebooks such as =.mobi= and =.epub= files
+catdoc,>0,c,Optional
 Encode,>0,cpan,Required
 Error,>0,cpan,Required
-catdoc,>0,c,Optional
-ppthtml,>0,c,Required
-pdftotext,>0,c,Required for indexing =.pdf=. Part of poppler-utils
-soffice,>0,c,One of antiword, abiword, soffice or wvWare is required for =.doc= and =.docx0 files
-antiword,>0,c,One of antiword, abiword, soffice or wvWare is required for =.doc= files
-abiword,>0,c,One of antiword, abiword, soffice or wvWare is required for =.doc= files
-wvWare,>0,c,One of antiword, abiword, soffice or wvWare is required for =.doc= files
+File::Which,>0,cpan,Required
 html2text,>0,c,One of html2text or lynx for indexing html files
 lynx,>0,c,One of html2text or lynx for indexing html files
+Module::Pluggable,>0,cpan,Required
 odt2txt,>0,c,Required for indexing OpenDocument and StarOffice documents
-xlsx2csv,>0,c,One of Spreadsheet::ParseXLSX or xlsx2csv is required for =.xlsx files
+pdftotext,>0,c,Required for indexing =.pdf=. Part of poppler-utils
+ppthtml,>0,c,Required
+soffice,>0,c,One of antiword, abiword, soffice or wvWare is required for =.doc= and =.docx0= files
+Spreadsheet::ParseExcel,>0,cpan,Required for =.xls= files
+Spreadsheet::XLSX,>0,cpan,One of Spreadsheet::ParseXLSX or xlsx2csv is required for =.xlsx= files
 tesseract,>0,c,OCR for tiff files,Optional
+wvWare,>0,c,One of antiword, abiword, soffice or wvWare is required for =.doc= files
+xlsx2csv,>0,c,One of Spreadsheet::ParseXLSX or xlsx2csv is required for =.xlsx= files
+XML::Twig,>=3,cpan,REquired for indexing PPTX files

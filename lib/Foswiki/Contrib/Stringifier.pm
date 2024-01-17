@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 #
-# Copyright (C) 2009-2018 Foswiki Contributors
+# Copyright (C) 2009-2024 Foswiki Contributors
 #
 # For licensing info read LICENSE file in the Foswiki root.
 # This program is free software; you can redistribute it and/or
@@ -41,30 +41,54 @@ sub _getMimeType {
     }
   }
 
+  print STDERR "Stringifier - getMimeType($fileName) = ".($mimeType//'undef')."\n" if $Foswiki::cfg{StringifierContrib}{Debug};
+
+
   return $mimeType;
 }
 
+sub canStringify {
+  my ($this, $fileName) = @_;
+
+  my $mime = _getMimeType($fileName);
+  unless ($mime) {
+    if ($fileName =~ /\.(.*?)$/) {
+      $mime = $1;
+    }
+  }
+
+  return $mime && $this->handler_for($fileName, $mime) ? 1:0;
+} 
+
 sub stringFor {
-  my ($class, $filename, $mime) = @_;
+  my ($this, $fileName, $mime, $debug) = @_;
 
-  return unless -r $filename;
-  $mime = _getMimeType($filename) unless defined $mime;
+  $debug //= $Foswiki::cfg{StringifierContrib}{Debug};
 
-  if ($Foswiki::cfg{StringifierContrib}{Debug}) {
-    print STDERR "StringifierContrib - no mime for $filename\n" unless $mime;
+  return unless -r $fileName;
+  $mime = _getMimeType($fileName) unless defined $mime;
+
+  unless ($mime) {
+    if ($fileName =~ /\.(.*?)$/) {
+      $mime = $1;
+    }
+  }
+
+  if ($debug) {
+    print STDERR "Stringifier - no mime for $fileName\n" unless $mime;
   }
   return unless $mime;
 
-  my $impl = $class->handler_for($filename, $mime);
+  my $impl = $this->handler_for($fileName, $mime);
 
-  if ($Foswiki::cfg{StringifierContrib}{Debug}) {
-    print STDERR "file $filename is a $mime ... using ".($impl||'undef')."\n";
+  if ($debug) {
+    print STDERR "file $fileName is a $mime ... using ".($impl||'undef')."\n";
   }
   return unless $impl;
 
   my $plugin = $impl->new();
 
-  return $plugin->stringForFile($filename);
+  return $plugin->stringForFile($fileName);
 }
 
 1;

@@ -1,5 +1,5 @@
 # Copyright (C) 2009 TWIKI.NET (http://www.twiki.net)
-# Copyright (C) 2009-2018 Foswiki Contributors
+# Copyright (C) 2009-2024 Foswiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -21,25 +21,22 @@ use warnings;
 use Foswiki::Contrib::Stringifier::Base ();
 our @ISA = qw( Foswiki::Contrib::Stringifier::Base );
 
-my $docx2txt = $Foswiki::cfg{StringifierContrib}{docx2txtCmd} || 'docx2txt.pl';
-
-# Only if docx2txt.pl exists, I register myself.
-if (   defined( $Foswiki::cfg{StringifierContrib}{WordIndexer} )
-    && __PACKAGE__->_programExists($docx2txt) )
-{
-    __PACKAGE__->register_handler( "text/docx", ".docx" );
-}
+__PACKAGE__->register_handler("text/docx", ".docx", ".dotx");
 
 sub stringForFile {
-    my ($self, $filename) = @_;
+    my ($this, $filename) = @_;
 
-    my $cmd = $docx2txt . ' %FILENAME|F% -';
-    my ($text, $exit) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $filename);
+    my $cmd = $Foswiki::cfg{StringifierContrib}{Docx2txtCmd} || "$Foswiki::cfg{ToolsDir}/docx2txt.pl %FILENAME|F% -";
+    my ($text, $exit, $error) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $filename);
 
-    return '' unless ($exit == 0);
+    if ($exit) {
+      print STDERR "ERROR: $error\n";
+      return "";
+    }
 
-    $text = $self->decode($text);
-    $text =~ s/^\s+|\s+$//g;
+    $text = $this->decode($text);
+    $text =~ s/^\s+//;
+    $text =~ s/\s+$//;
 
     return $text;
 }

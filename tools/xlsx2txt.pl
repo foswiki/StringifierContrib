@@ -16,28 +16,28 @@ unless (-e $file) {
   exit 1;
 }
 
-my $book = Spreadsheet::XLSX->new($file);
-
-return '' unless $book;
-
 my $text = '';
 
-foreach my $sheet (@{$book->{Worksheet}}) {
-  $text .= sprintf("%s\n", $sheet->{Name});
-  $sheet->{MaxRow} ||= $sheet->{MinRow};
+my $book = Spreadsheet::XLSX->new($file);
 
-  foreach my $row ($sheet->{MinRow} .. $sheet->{MaxRow}) {
-    $sheet->{MaxCol} ||= $sheet->{MinCol};
+if ($book) {
+  foreach my $sheet (@{$book->{Worksheet}}) {
+    $text .= sprintf("%s\n", $sheet->{Name});
+    $sheet->{MaxRow} ||= $sheet->{MinRow};
 
-    foreach my $col ($sheet->{MinCol} .. $sheet->{MaxCol}) {
-      my $cell = $sheet->{Cells}[$row][$col];
-      if ($cell) {
-        $text .= sprintf("%s\t", $cell->{Val});
+    foreach my $row ($sheet->{MinRow} .. $sheet->{MaxRow}) {
+      $sheet->{MaxCol} ||= $sheet->{MinCol};
+
+      foreach my $col ($sheet->{MinCol} .. $sheet->{MaxCol}) {
+	my $cell = $sheet->{Cells}[$row][$col];
+	if ($cell) {
+	  $text .= sprintf("%s\t", $cell->{Val});
+	}
       }
+      $text .= "\n";
     }
     $text .= "\n";
   }
-  $text .= "\n";
 }
 
 print $text;

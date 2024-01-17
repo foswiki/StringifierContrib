@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2018 Foswiki Contributors
+# Copyright (C) 2009-2024 Foswiki Contributors
 #
 # For licensing info read LICENSE file in the Foswiki root.
 # This program is free software; you can redistribute it and/or
@@ -17,41 +17,35 @@ package Foswiki::Contrib::Stringifier::Plugins::DOC_abiword;
 use strict;
 use warnings;
 
+use Foswiki::Func();
 use Foswiki::Contrib::Stringifier::Base ();
 our @ISA = qw( Foswiki::Contrib::Stringifier::Base );
 use File::Temp ();
 
-my $abiword = $Foswiki::cfg{StringifierContrib}{abiwordCmd} || 'abiword';
-
-#only load abiword if the user has selected it in configure - Sven & Andrew have had no success with it
 if (defined($Foswiki::cfg{StringifierContrib}{WordIndexer}) && 
     ($Foswiki::cfg{StringifierContrib}{WordIndexer} eq 'abiword')) {
-# Only if abiword exists, I register myself.
-    if (__PACKAGE__->_programExists($abiword)){
-        __PACKAGE__->register_handler("application/word", ".doc");
+    if (__PACKAGE__->_programExists("abiword")){
+        __PACKAGE__->register_handler("application/msword", ".doc");
     }
 }
 
 sub stringForFile {
-    my ($self, $file) = @_;
+    my ($this, $file) = @_;
     my $tmpFile = File::Temp->new(SUFFIX =>".txt");
     
-    my $cmd = $abiword . ' --to=%TMPFILE|F% %FILENAME|F%';
+    my $cmd = $Foswiki::cfg{StringifierContrib}{AbiwordCmd} || 'abiword --to=%TMPFILE|F% %FILENAME|F%';
     my ($output, $exit, $error) = Foswiki::Sandbox->sysCommand($cmd, TMPFILE => $tmpFile->filename, FILENAME => $file);
 
     if ($exit) {
-      print STDERR "ERROR: $abiword returned with code $exit - $error\n";
+      print STDERR "ERROR: abiword returned with code $exit - $error\n";
       return "";
     }
 
-    my $in;
-    open($in, $tmpFile) or return "";
-    local $/ = undef;    # set to read to EOF
-    my $text = <$in>;
-    close($in);
+    my $text = Foswiki::Func::readFile($tmpFile);
 
-    $text = $self->decode($text);
-    $text =~ s/^\s+|\s+$//g;
+    $text = $this->decode($text);
+    $text =~ s/^\s+//;
+    $text =~ s/\s+$//;
 
     return $text;
 }

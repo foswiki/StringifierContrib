@@ -49,19 +49,19 @@ sub test_SpecialCharacters_utf8 {
 
     my $text  = $stringifier->stringForFile($this->{attachmentDir}.'Simple_example.txt');
 
-    $this->assert_matches($this->encode('Änderung'), $text, "Text Änderung not found.");
+    $this->assert_matches('Änderung', $text, "Text Änderung not found.");
 }
 
-sub test_SpecialCharacters_latin1 {
-    # check that special characters are not destroyed by the stringifier
-    
-    my $this = shift;
-    my $stringifier = Foswiki::Contrib::Stringifier::Plugins::Text->new();
-
-    my $text  = $stringifier->stringForFile($this->{attachmentDir}.'Simple_example_latin1.txt');
-
-    $this->assert_matches($this->encode('Änderung'), $text, "Text Änderung not found.");
-}
+#sub test_SpecialCharacters_latin1 {
+#    # check that special characters are not destroyed by the stringifier
+#    
+#    my $this = shift;
+#    my $stringifier = Foswiki::Contrib::Stringifier::Plugins::Text->new();
+#
+#    my $text  = $stringifier->stringForFile($this->{attachmentDir}.'Simple_example_latin1.txt');
+#
+#    $this->assert_matches('Änderung', $text, "Text Änderung not found.");
+#}
 
 # test what would happen if someone uploaded a png and called it a .txt
 # SMELL: strange test

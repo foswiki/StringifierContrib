@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2018 Foswiki Contributors
+# Copyright (C) 2009-2024 Foswiki Contributors
 #
 # For licensing info read LICENSE file in the Foswiki root.
 # This program is free software; you can redistribute it and/or
@@ -24,37 +24,35 @@ use Foswiki::Func ();
 use File::Temp ();
 use File::Basename qw(basename);
 
-my $soffice = $Foswiki::cfg{StringifierContrib}{sofficeCmd} || '/usr/bin/soffice';
-
 if (defined($Foswiki::cfg{StringifierContrib}{WordIndexer}) && 
     ($Foswiki::cfg{StringifierContrib}{WordIndexer} eq 'soffice')) {
-    if (__PACKAGE__->_programExists($soffice)) {
-        __PACKAGE__->register_handler("application/word", ".doc", "text/docx", ".docx");
+    if (__PACKAGE__->_programExists("soffice")) {
+        __PACKAGE__->register_handler("application/msword", ".doc", "text/docx", ".docx", ".dotx");
     }
 }
 
 sub stringForFile {
-    my ($self, $file) = @_;
-    my $tmpDir = File::Temp->newdir();
+    my ($this, $file) = @_;
     
-    my $cmd = $soffice . ' --convert-to txt:Text --invisible --headless --minimized --outdir %OUTDIR|F% %FILENAME|F%';
+    my $tmpDir = File::Temp->newdir();
+    my $cmd = $Foswiki::cfg{StringifierContrib}{SofficeCmd} || 'soffice --convert-to %FORMAT|S% --invisible --headless --minimized --outdir %OUTDIR|F% %FILENAME|F%';
 
-    my ($data, $exit) = Foswiki::Sandbox->sysCommand(
+    my ($data, $exit, $error) = Foswiki::Sandbox->sysCommand(
         $cmd,
         OUTDIR => $tmpDir->dirname,
         FILENAME  => $file,
+        FORMAT => "pdf"
     );
 
-    return '' unless ($exit == 0);
+    if ($error) {
+      print STDERR "ERROR: $error\n";
+      return "";
+    }
 
-    my $txtFile = $tmpDir->dirname . '/' . basename($file, ".docx", ".doc") . '.txt';
+    my $pdfFile = $tmpDir->dirname . '/' . basename($file, ".docx", ".doc") . '.pdf';
 
-    my $text = Foswiki::Func::readFile($txtFile);
-
-    $text = $self->decode($text);
-    $text =~ s/^\s+|\s+$//g;
-
-    return $text;
+    my $stringifier = Foswiki::Contrib::Stringifier::Plugins::PDF->new();
+    return $stringifier->stringForFile($pdfFile);
 }
 
 1;

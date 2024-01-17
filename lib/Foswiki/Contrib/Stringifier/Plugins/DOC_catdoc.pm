@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2017 Foswiki Contributors
+# Copyright (C) 2009-2024 Foswiki Contributors
 #
 # For licensing info read LICENSE file in the Foswiki root.
 # This program is free software; you can redistribute it and/or
@@ -22,30 +22,28 @@ use Foswiki::Contrib::Stringifier ();
 
 our @ISA = qw( Foswiki::Contrib::Stringifier::Base );
 
-my $catdoc = $Foswiki::cfg{StringifierContrib}{catdocCmd} || 'catdoc';
-
 if (defined($Foswiki::cfg{StringifierContrib}{WordIndexer}) &&
     ($Foswiki::cfg{StringifierContrib}{WordIndexer} eq 'catdoc')) {
     # Only if wv exists, I register myself.
-    if (__PACKAGE__->_programExists($catdoc)){
-        __PACKAGE__->register_handler("application/word", ".doc");
+    if (__PACKAGE__->_programExists("catdoc")){
+        __PACKAGE__->register_handler("application/msword", ".doc");
     }
 }
 
-
 sub stringForFile {
-    my ($self, $file) = @_;
+    my ($this, $file) = @_;
 
-    my $cmd = $catdoc . ' %FILENAME|F%';
+    my $cmd = $Foswiki::cfg{StringifierContrib}{CatdocCmd} || 'catdoc %FILENAME|F%';
     my ($text, $exit, $error) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $file);
     
     if ($exit) {
-      print STDERR "ERROR: $catdoc returned with code $exit - $error\n";
+      print STDERR "ERROR: $error\n";
       return "";
     }
 
-    $text = $self->decode($text);
-    $text =~ s/^\s+|\s+$//g;
+    $text = $this->decode($text);
+    $text =~ s/^\s+//;
+    $text =~ s/\s+$//;
 
     return $text;
 }

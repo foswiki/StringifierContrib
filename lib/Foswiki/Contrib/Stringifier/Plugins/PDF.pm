@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2018 Foswiki Contributors
+# Copyright (C) 2009-2024 Foswiki Contributors
 #
 # For licensing info read LICENSE file in the Foswiki root.
 # This program is free software; you can redistribute it and/or
@@ -21,25 +21,26 @@ use Foswiki::Contrib::Stringifier::Base ();
 our @ISA = qw( Foswiki::Contrib::Stringifier::Base );
 use Foswiki::Contrib::Stringifier ();
 
-my $pdftotext = $Foswiki::cfg{StringifierContrib}{pdftotextCmd} || 'pdftotext';
-
 # Only if pdftotext exists, I register myself.
-if (__PACKAGE__->_programExists($pdftotext)){
+if (__PACKAGE__->_programExists("pdftotext")){
     __PACKAGE__->register_handler("application/pdf", ".pdf");
 }
 
 sub stringForFile {
-    my ( $self, $filename ) = @_;
+    my ( $this, $filename ) = @_;
 
-    my $cmd = $pdftotext . ' %FILENAME|F% -enc UTF-8 -nopgbrk -q -';
-    my ( $text, $exit ) =
-      Foswiki::Sandbox->sysCommand( $cmd, FILENAME => $filename );
+    my $cmd = $Foswiki::cfg{StringifierContrib}{PdftotextCmd} || 'pdftotext %FILENAME|F% -enc UTF-8 -nopgbrk -q -';
+    my ($text, $exit, $error) = Foswiki::Sandbox->sysCommand( $cmd, FILENAME => $filename );
 
-    return '' unless ( $exit == 0 );
+    if ($exit) {
+      print STDERR "ERROR: $error\n";
+      return "";
+    }
 
-    $text = $self->decode($text);
+    $text = $this->decode($text);
     $text =~ s///g;    # remove any page break leftover
-    $text =~ s/^\s+|\s+$//g;
+    $text =~ s/^\s+//;
+    $text =~ s/\s+$//;
 
     return $text;
 }

@@ -1,4 +1,4 @@
-# Copyright (C) 2011-2018 Foswiki Contributors
+# Copyright (C) 2011-2024 Foswiki Contributors
 #
 # For licensing info read LICENSE file in the Foswiki root.
 # This program is free software; you can redistribute it and/or
@@ -20,29 +20,43 @@ use warnings;
 use Foswiki::Contrib::Stringifier::Base ();
 our @ISA = qw( Foswiki::Contrib::Stringifier::Base );
 
-my $odt2text = $Foswiki::cfg{StringifierContrib}{odt2txt} || 'odt2txt';
-
-__PACKAGE__->register_handler("application/vnd.oasis.opendocument.text", ".odt");
-__PACKAGE__->register_handler("application/vnd.oasis.opendocument.text-template", "ott");
-__PACKAGE__->register_handler("application/vnd.oasis.opendocument.presentation", "odp");
-__PACKAGE__->register_handler("application/vnd.oasis.opendocument.presentation-template", "otp");
-__PACKAGE__->register_handler("application/vnd.oasis.opendocument.spreadsheet", "ods");
-__PACKAGE__->register_handler("application/vnd.oasis.opendocument.spreadsheet-template", "ots");
-__PACKAGE__->register_handler("application/vnd.sun.xml.writer", "sxw");
-__PACKAGE__->register_handler("application/vnd.sun.xml.writer.template", "stw");
-__PACKAGE__->register_handler("application/vnd.sun.xml.calc", "sxc");
-__PACKAGE__->register_handler("application/vnd.sun.xml.calc.template", "stc");
-__PACKAGE__->register_handler("application/vnd.sun.xml.impress", "sxi");
-__PACKAGE__->register_handler("application/vnd.sun.xml.impress.template", "sti");
+if (__PACKAGE__->_programExists("odt2txt")) {
+  __PACKAGE__->register_handler("application/vnd.oasis.opendocument.chart", "odc");
+  __PACKAGE__->register_handler("application/vnd.oasis.opendocument.database", "odb");
+  __PACKAGE__->register_handler("application/vnd.oasis.opendocument.formula", "odf");
+  __PACKAGE__->register_handler("application/vnd.oasis.opendocument.graphics", "odg");
+  __PACKAGE__->register_handler("application/vnd.oasis.opendocument.graphics-template", "otg");
+  __PACKAGE__->register_handler("application/vnd.oasis.opendocument.image", "odi");
+  __PACKAGE__->register_handler("application/vnd.oasis.opendocument.presentation", "odp");
+  __PACKAGE__->register_handler("application/vnd.oasis.opendocument.presentation-template", "otp");
+  __PACKAGE__->register_handler("application/vnd.oasis.opendocument.spreadsheet", "ods");
+  __PACKAGE__->register_handler("application/vnd.oasis.opendocument.spreadsheet-template", "ots");
+  __PACKAGE__->register_handler("application/vnd.oasis.opendocument.text-master", "odm");
+  __PACKAGE__->register_handler("application/vnd.oasis.opendocument.text", ".odt");
+  __PACKAGE__->register_handler("application/vnd.oasis.opendocument.text-template", "ott");
+  __PACKAGE__->register_handler("application/vnd.oasis.opendocument.text-web", "oth");
+  __PACKAGE__->register_handler("application/vnd.sun.xml.calc", "sxc");
+  __PACKAGE__->register_handler("application/vnd.sun.xml.calc.template", "stc");
+  __PACKAGE__->register_handler("application/vnd.sun.xml.impress", "sxi");
+  __PACKAGE__->register_handler("application/vnd.sun.xml.impress.template", "sti");
+  __PACKAGE__->register_handler("application/vnd.sun.xml.writer", "sxw");
+  __PACKAGE__->register_handler("application/vnd.sun.xml.writer.template", "stw");
+}
 
 sub stringForFile {
-    my ($self, $filename) = @_;
+    my ($this, $filename) = @_;
     
-    my $cmd = $odt2text . ' --encoding=UTF-8 %FILENAME|F%';
-    my ($text, $exit) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $filename);
+    my $cmd = $Foswiki::cfg{StringifierContrib}{Odt2txtCmd} || 'odt2txt --encoding=UTF-8 %FILENAME|F%';
+    my ($text, $exit, $error) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $filename);
 
-    $text = $self->decode($text);
-    $text =~ s/^\s+|\s+$//g;
+    if ($exit) {
+      print STDERR "ERROR: $error\n";
+      return "";
+    }
+
+    $text = $this->decode($text);
+    $text =~ s/^\s+//;
+    $text =~ s/\s+$//;
 
     return $text;
 }

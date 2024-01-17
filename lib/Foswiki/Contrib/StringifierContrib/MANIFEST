@@ -10,6 +10,7 @@ lib/Foswiki/Contrib/Stringifier/Plugins/DOC_catdoc.pm 0644
 lib/Foswiki/Contrib/Stringifier/Plugins/DOC_soffice.pm 0644
 lib/Foswiki/Contrib/Stringifier/Plugins/DOC_wv.pm 0644
 lib/Foswiki/Contrib/Stringifier/Plugins/DOCX.pm 0644
+lib/Foswiki/Contrib/Stringifier/Plugins/EBOOK.pm 0644
 lib/Foswiki/Contrib/Stringifier/Plugins/HTML_html2text.pm 0644
 lib/Foswiki/Contrib/Stringifier/Plugins/HTML_links.pm 0644
 lib/Foswiki/Contrib/Stringifier/Plugins/HTML_lynx.pm 0644

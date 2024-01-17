@@ -8,31 +8,7 @@
 This extension serves as a helper to stringify documents in a way that they can be indexed
 by full-text search engines such as Foswiki:Extensions/KinoSearchContrib or Foswiki:Extensions/SolrPlugin.
 
-It supports all major office document formats such as:
-
-   * =.doc=
-   * =.docx=
-   * =.html=
-   * =.odp=
-   * =.ods=
-   * =.odt=
-   * =.otp=
-   * =.ots=
-   * =.ott=
-   * =.pdf=
-   * =.ppt=
-   * =.pptx=
-   * =.stc=
-   * =.sti=
-   * =.stw=
-   * =.sxc=
-   * =.sxi=
-   * =.sxw=
-   * =.tif=
-   * =.txt=
-   * =.xls=
-   * =.xlsx=
-   * =.xml=
+It supports all major office document formats, i.e. MS-Office and <nop>OpenDocument formats.
 
 %TOPIC% is organized in plugins to serialization a document format by delegating it to according backends.
 For some formats there are alternative backends to chose from. For example a DOC file can be serialized 
@@ -63,13 +39,26 @@ To index =.ppt= files you may select one of the following:
    * =pphtml=
    * =soffice=
 
+---++ Backend for HTML
+
+There are a couple of options to index =.html= files:
+
+    * =w3m=
+    * =lynx=
+    * =links=
+    * =html2text=
+
+Some of the other backends generate html temporarily which is then converted
+to plain text using the html stringifier.
+
 ---++ Backends for DOCX, PPTX, XLSX
 
-To index these file types, you will need to install the following tools from Sourceforge:
+To index these file types, you will need to install the following tools:
 
    * =docx2txt= for =.docx=
    * =pptx2txt= for =.pptx=
    * =xls2txt= for =.xls=
+   * =soffice=
    * CPAN:Spreadsheet::XLSX for =.xlsx=
 
 Then set the command path to these tools in =configure=.
@@ -77,6 +66,11 @@ Then set the command path to these tools in =configure=.
 ---++ Backend for <nop>OpenDocument and Staroffice documents
 
 To index these file types you need to install [[http://stosberg.net/odt2txt/][odt2txt]].
+
+
+---++ Backed fo E-books
+
+To index common ebook file formats you need to install [[https://calibre-ebook.com/][calibre]]
 
 ---++ Installing the Contrib
 
@@ -142,6 +136,8 @@ Foswiki:Development/UnitTests for more information on unit testing.
 
 ---++ Change History
 %TABLE{columnwidths="7em" tablewidth="100%"}%
+|  17 Jan 2024: | (7.00) reworked configuration settings |
+|  21 Oct 2019: | (6.00) performance fixes; new api =canStringify()=; added support for common ebook file formats |
 |  16 Aug 2018: | (5.20) register more mime types to the text stringifier |
 |  09 Jan 2018: | (5.10) added support for tiff documents using tesseract  |
 |  18 Sep 2017: | (5.00) make html-to-text converter pluggable |
@@ -163,7 +159,7 @@ Foswiki:Development/UnitTests for more information on unit testing.
 
 %META:FORM{name="PackageForm"}%
 %META:FIELD{name="Author" title="Author" value="Foswiki:Main.MarkusHesse, Foswiki:Main.SvenDowideit, Foswiki:Main.MichaelDaum & Foswiki:Main.AndrewJones"}%
-%META:FIELD{name="Copyright" title="Copyright" value="&copy; 2007, Foswiki:Main.MarkusHesse; &copy; 2009-2018, Foswiki Contributors"}%
+%META:FIELD{name="Copyright" title="Copyright" value="&copy; 2007, Foswiki:Main.MarkusHesse; &copy; 2009-2024, Foswiki Contributors"}%
 %META:FIELD{name="Description" title="Description" value="%25$SHORTDESCRIPTION%25"}%
 %META:FIELD{name="Home" title="Home" value="Foswiki:Extensions/%TOPIC%"}%
 %META:FIELD{name="License" title="License" value="GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]])"}%

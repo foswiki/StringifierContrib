@@ -1,5 +1,4 @@
-# Copyright (C) 2009 TWIKI.NET (http://www.twiki.net)
-# Copyright (C) 2009-2024 Foswiki Contributors
+# Copyright (C) 2022-2024 Foswiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -13,27 +12,33 @@
 #
 # For licensing info read LICENSE file in the Foswiki root.
 
-package Foswiki::Contrib::Stringifier::Plugins::PPTX;
+package Foswiki::Contrib::Stringifier::Plugins::EBOOK;
 
 use strict;
 use warnings;
 
+use Foswiki::Func();
 use Foswiki::Contrib::Stringifier::Base ();
 our @ISA = qw( Foswiki::Contrib::Stringifier::Base );
+use File::Temp ();
 
-__PACKAGE__->register_handler("text/pptx", ".pptx");
+if (__PACKAGE__->_programExists("ebook-convert") ) {
+    __PACKAGE__->register_handler( ".azw", ".azw3", ".azw4", ".cbz", ".cbr", ".cbc", ".chm", ".djvu", ".epub", ".fb2", ".fbz", ".htmlz", ".lit", ".lrf", ".mobi", ".prc", ".pdb", ".pml", ".rb", ".snb", ".tcr", ".txtz")
+}
 
 sub stringForFile {
     my ($this, $filename) = @_;
-    
-    my $cmd = $Foswiki::cfg{StringifierContrib}{Pptx2txtCmd} || "$Foswiki::cfg{ToolsDir}/pptx2txt.pl %FILENAME|F% -";
 
-    my ($text, $exit, $error) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $filename);
+    my $cmd = $Foswiki::cfg{StringifierContrib}{Ebook2txtCmd} || 'ebook-convert %FILENAME|F% %TMPFILE|F%';
+    my $tmpFile = File::Temp->new(SUFFIX =>".txt");
+    my ($output, $exit, $error) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $filename, TMPFILE => $tmpFile->filename);
 
     if ($exit) {
       print STDERR "ERROR: $error\n";
       return "";
     }
+
+    my $text = Foswiki::Func::readFile($tmpFile);
 
     $text = $this->decode($text);
     $text =~ s/^\s+//;
@@ -43,3 +48,4 @@ sub stringForFile {
 }
 
 1;
+

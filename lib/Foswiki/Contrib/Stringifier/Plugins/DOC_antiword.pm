@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2018 Foswiki Contributors
+# Copyright (C) 2009-2024 Foswiki Contributors
 #
 # For licensing info read LICENSE file in the Foswiki root.
 # This program is free software; you can redistribute it and/or
@@ -20,26 +20,29 @@ use warnings;
 use Foswiki::Contrib::Stringifier::Base ();
 our @ISA = qw( Foswiki::Contrib::Stringifier::Base );
 
-my $antiword = $Foswiki::cfg{StringifierContrib}{antiwordCmd} || 'antiword';
-
 if (!defined($Foswiki::cfg{StringifierContrib}{WordIndexer}) || 
     ($Foswiki::cfg{StringifierContrib}{WordIndexer} eq 'antiword')) {
     # Only if antiword exists, I register myself.
-    if (__PACKAGE__->_programExists($antiword)){
-        __PACKAGE__->register_handler("application/word", ".doc");
+    if (__PACKAGE__->_programExists("antiword")){
+        __PACKAGE__->register_handler("application/msword", ".doc");
     }
 }
 
 sub stringForFile {
-    my ($self, $file) = @_;
+    my ($this, $file) = @_;
     
-    my $cmd = $antiword . ' %FILENAME|F%';
-    my ($text, $exit) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $file);
+    my $cmd = $Foswiki::cfg{StringifierContrib}{AntiwordCmd} || 'antiword %FILENAME|F%';
+    my ($text, $exit, $error) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $file);
 
-    return '' unless ($exit == 0);
+    if ($exit) {
+      print STDERR "ERROR: $error\n";
+      return "";
+    }
 
-    $text = $self->decode($text);
-    $text =~ s/^\s+|\s+$//g;
+    $text = $this->decode($text);
+    $text =~ s/\[pic\]//g;
+    $text =~ s/^\s+//;
+    $text =~ s/\s+$//;
     
     return $text;
 }

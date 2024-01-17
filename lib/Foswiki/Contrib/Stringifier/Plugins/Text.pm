@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2018 Foswiki Contributors
+# Copyright (C) 2009-2024 Foswiki Contributors
 #
 # For licensing info read LICENSE file in the Foswiki root.
 # This program is free software; you can redistribute it and/or
@@ -17,26 +17,23 @@ package Foswiki::Contrib::Stringifier::Plugins::Text;
 use strict;
 use warnings;
 
+use Foswiki::Func ();
 use Foswiki::Contrib::Stringifier::Base ();
 our @ISA = qw( Foswiki::Contrib::Stringifier::Base );
 
-__PACKAGE__->register_handler("text/plain", "text/xml", ".xml", ".txt", ".css", ".js", ".log");
+__PACKAGE__->register_handler("text/plain", "text/xml", ".xml", ".txt", ".css", ".js", ".log", ".csv");
 
 sub stringForFile {
-    my ( $self, $file ) = @_;
-    my $in;
+    my ( $this, $file ) = @_;
 
     return '' unless -e $file;
 
-    open($in, $file) or return "";
-    local $/ = undef;    # set to read to EOF
-    my $text = <$in>;
-    close($in);
+    my $text = Foswiki::Func::readFile($file);
 
     $text =~ s/^\?//; # remove bom
-
-    $text = $self->decode($text);
-    $text =~ s/^\s+|\s+$//g;
+    $text = $this->decode($text);
+    $text =~ s/^\s+//;
+    $text =~ s/\s+$//;
     
     return $text;
 }

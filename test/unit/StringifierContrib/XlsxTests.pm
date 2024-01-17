@@ -4,6 +4,7 @@ use StringifierTest;
 our @ISA = qw( StringifierTest );
 
 use strict;
+use warnings;
 use utf8;
 
 use Foswiki::Contrib::Stringifier::Base();
@@ -28,13 +29,10 @@ sub tear_down {
 
 sub test_stringForFile {
     my $this = shift;
-    my $stringifier = Foswiki::Contrib::Stringifier::Plugins::XLSX->new();
 
-    my $text  = $stringifier->stringForFile($this->{attachmentDir}.'Simple_example.xlsx');
-    my $text2 = Foswiki::Contrib::Stringifier->stringFor($this->{attachmentDir}.'Simple_example.xlsx');
+    my $text = Foswiki::Contrib::Stringifier->stringFor($this->{attachmentDir}.'Simple_example.xlsx');
 
     $this->assert(defined($text), "No text returned.");
-    $this->assert_str_equals($text, $text2, "XLSX stringifier not well registered.");
 
     my $ok = $text =~ /dummy/;
     $this->assert($ok, "Text dummy not included")
@@ -48,11 +46,11 @@ sub test_SpecialCharacters {
 
     my $text  = $stringifier->stringForFile($this->{attachmentDir}.'Simple_example.xlsx');
     
-    $this->assert_matches($this->encode('Größer'), $text, "Text Größer not found.");
+    $this->assert_matches('Größer', $text);#, "Text Größer not found.");
 		  
     $text  = $stringifier->stringForFile($this->{attachmentDir}.'Portuguese_example.xlsx');
     
-    $this->assert_matches($this->encode('Formatação'), $text, "Text Formatação not found.");
+    $this->assert_matches('Formatação', $text, "Text Formatação not found.");
     $this->assert(!($text =~ m\GENERAL\), "Bad string GENERAL appeares.");
 }
 

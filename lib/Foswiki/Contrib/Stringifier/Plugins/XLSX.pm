@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2018 Foswiki Contributors
+# Copyright (C) 2009-2024 Foswiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,26 +20,30 @@ use warnings;
 use Foswiki::Contrib::Stringifier::Base ();
 our @ISA = qw( Foswiki::Contrib::Stringifier::Base );
 
-my $xlsx2csv = $Foswiki::cfg{StringifierContrib}{xlsx2csv} || 'xlsx2csv';
 
 if (defined($Foswiki::cfg{StringifierContrib}{Excel2Indexer})
   && ($Foswiki::cfg{StringifierContrib}{Excel2Indexer} eq 'xlsx2csv'))
 {
-  if (__PACKAGE__->_programExists($xlsx2csv)) {
-    __PACKAGE__->register_handler("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ".xlsx");
+  if (__PACKAGE__->_programExists("xlsx2csv")) {
+    __PACKAGE__->register_handler("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ".xlsx", ".xlsm");
   }
 }
 
 sub stringForFile {
-    my ($self, $filename) = @_;
+    my ($this, $filename) = @_;
     
-    my $cmd = $xlsx2csv . ' -i -d tab %FILENAME|F%';
-    my ($text, $exit) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $filename);
+    my $cmd = $Foswiki::cfg{StringifierContrib}{Xlsx2csvCmd} || '/usr/bin/xlsx2csv -i -d tab %FILENAME|F%';
 
-    return '' unless $exit == 0;
+    my ($text, $exit, $error) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $filename);
 
-    $text = $self->decode($text);
-    $text =~ s/^\s+|\s+$//g;
+    if ($exit) {
+      print STDERR "ERROR: $error\n";
+      return "";
+    }
+
+    $text = $this->decode($text);
+    $text =~ s/^\s+//;
+    $text =~ s/\s+$//;
 
     return $text;
 }

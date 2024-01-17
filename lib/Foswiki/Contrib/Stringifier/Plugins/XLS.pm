@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2018 Foswiki Contributors
+# Copyright (C) 2009-2024 Foswiki Contributors
 #
 # For licensing info read LICENSE file in the Foswiki root.
 # This program is free software; you can redistribute it and/or
@@ -20,26 +20,26 @@ use warnings;
 use Foswiki::Contrib::Stringifier::Base ();
 our @ISA = qw( Foswiki::Contrib::Stringifier::Base );
 
-my $xls2txt = $Foswiki::cfg{StringifierContrib}{xls2txtCmd} || 'xls2txt.pl';
-
 if (defined($Foswiki::cfg{StringifierContrib}{ExcelIndexer})
   && ($Foswiki::cfg{StringifierContrib}{ExcelIndexer} eq 'script'))
 {
-  if (__PACKAGE__->_programExists($xls2txt)) {
-    __PACKAGE__->register_handler("application/excel", ".xls");
-  }
+  __PACKAGE__->register_handler("application/msexcel", ".xls");
 }
 
 sub stringForFile {
-    my ($self, $filename) = @_;
+    my ($this, $filename) = @_;
     
-    my $cmd = $xls2txt . ' %FILENAME|F% -';
-    my ($text, $exit) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $filename);
-    
-    return '' unless ($exit == 0);
+    my $cmd = $Foswiki::cfg{StringifierContrib}{Xls2txtCmd} || "$Foswiki::cfg{ToolsDir}/xls2txt.pl %FILENAME|F% -";
+    my ($text, $exit, $error) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $filename);
 
-    $text = $self->decode($text);
-    $text =~ s/^\s+|\s+$//g;
+    if ($exit) {
+      print STDERR "ERROR: $error\n";
+      return "";
+    }
+    
+    $text = $this->decode($text);
+    $text =~ s/^\s+//;
+    $text =~ s/\s+$//;
 
     return $text;
 }

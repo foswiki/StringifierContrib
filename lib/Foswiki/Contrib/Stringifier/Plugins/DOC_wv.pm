@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2018 Foswiki Contributors
+# Copyright (C) 2009-2024 Foswiki Contributors
 #
 # For licensing info read LICENSE file in the Foswiki root.
 # This program is free software; you can redistribute it and/or
@@ -19,39 +19,40 @@ use warnings;
 
 use Foswiki::Contrib::Stringifier::Base ();
 use Foswiki::Contrib::Stringifier ();
+use Foswiki::Func();
 
 our @ISA = qw( Foswiki::Contrib::Stringifier::Base );
 use File::Temp ();
 
-my $wvText = $Foswiki::cfg{StringifierContrib}{wvTextCmd} || 'wvText';
-
 if (defined($Foswiki::cfg{StringifierContrib}{WordIndexer}) &&
     ($Foswiki::cfg{StringifierContrib}{WordIndexer} eq 'wv')) {
     # Only if wv exists, I register myself.
-    if (__PACKAGE__->_programExists($wvText)){
-        __PACKAGE__->register_handler("application/word", ".doc");
+    if (__PACKAGE__->_programExists("wvText")){
+        __PACKAGE__->register_handler("application/msword", ".doc");
     }
 }
 
-
 sub stringForFile {
-    my ($self, $file) = @_;
+    my ($this, $file) = @_;
 
     my $tmpFile = File::Temp->new(SURFIX => ".txt");
     
-    my $cmd = $wvText . ' %FILENAME|F% %TMPFILE|F%';
-    my ($output, $exit) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $file, TMPFILE => $tmpFile->filename);
+    my $cmd = $Foswiki::cfg{StringifierContrib}{WvTextCmd} || 'wvText %FILENAME|F% %TMPFILE|F%';
+    my ($output, $exit, $error) = Foswiki::Sandbox->sysCommand($cmd, 
+      FILENAME => $file, 
+      TMPFILE => $tmpFile->filename
+    );
+
+    if ($exit) {
+      print STDERR "ERROR: $error\n";
+      return "";
+    }
     
-    return '' unless ($exit == 0);
+    my $text = Foswiki::Func::readFile($tmpFile);
 
-    my $in;
-    open($in, $tmpFile) or return "";
-    local $/ = undef;    # set to read to EOF
-    my $text = <$in>;
-    close($in);
-
-    $text = $self->decode($text);
-    $text =~ s/^\s+|\s+$//g;
+    $text = $this->decode($text);
+    $text =~ s/^\s+//;
+    $text =~ s/\s+$//;
 
     return $text;
 }

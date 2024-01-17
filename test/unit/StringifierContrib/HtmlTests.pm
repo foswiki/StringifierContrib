@@ -28,13 +28,10 @@ sub tear_down {
 
 sub test_stringForFile {
     my $this = shift;
-    my $stringifier = Foswiki::Contrib::Stringifier::Plugins::HTML->new();
 
-    my $text  = $stringifier->stringForFile($this->{attachmentDir}.'Simple_example.html');
-    my $text2 = Foswiki::Contrib::Stringifier->stringFor($this->{attachmentDir}.'Simple_example.html');
+    my $text = Foswiki::Contrib::Stringifier->stringFor($this->{attachmentDir}.'Simple_example.html');
 
     $this->assert(defined($text), "No text returned.");
-    $this->assert_str_equals($text, $text2, "HTML stringifier not well registered.");
 
     my $ok = $text =~ /Cern/;
     $this->assert($ok, "Text Cern not included");
@@ -43,12 +40,10 @@ sub test_stringForFile {
 }
 
 sub test_SpecialCharacters {
+    my $this = shift;
     # check that special characters are not destroyed by the stringifier
     
-    my $this = shift;
-    my $stringifier = Foswiki::Contrib::Stringifier::Plugins::HTML->new();
-
-    my $text  = $stringifier->stringForFile($this->{attachmentDir}.'Simple_example.html');
+    my $text = Foswiki::Contrib::Stringifier->stringFor($this->{attachmentDir}.'Simple_example.html');
 
     $this->assert_matches($this->encode('geöffnet'), $text, "Text geöffnet not found.");
 }
@@ -59,7 +54,7 @@ sub DONT_test_maliciousFile {
     my $this = shift;
     my $stringifier = Foswiki::Contrib::Stringifier::Plugins::HTML->new();
 
-    my $text  = $stringifier->stringForFile($this->{attachmentDir}.'Im_a_png.html');
+    my $text = Foswiki::Contrib::Stringifier->stringFor($this->{attachmentDir}.'Im_a_png.html');
 
     $this->assert_equals('', $text, "Malicious file generated some text?");
 }

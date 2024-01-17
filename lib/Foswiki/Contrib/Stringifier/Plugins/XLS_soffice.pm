@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2018 Foswiki Contributors
+# Copyright (C) 2009-2024 Foswiki Contributors
 #
 # For licensing info read LICENSE file in the Foswiki root.
 # This program is free software; you can redistribute it and/or
@@ -24,39 +24,34 @@ use Foswiki::Func ();
 use File::Temp ();
 use File::Basename qw(basename);
 
-my $soffice = $Foswiki::cfg{StringifierContrib}{sofficeCmd} || '/usr/bin/soffice';
-
-if (defined($Foswiki::cfg{StringifierContrib}{ExcelIndexer}) && 
-    ($Foswiki::cfg{StringifierContrib}{ExcelIndexer} eq 'soffice')) {
-    if (__PACKAGE__->_programExists($soffice)) {
-        __PACKAGE__->register_handler("application/excel", ".xls");
-    }
-}
-if (defined($Foswiki::cfg{StringifierContrib}{Excel2Indexer}) && 
-    ($Foswiki::cfg{StringifierContrib}{Excel2Indexer} eq 'soffice')) {
-    if (__PACKAGE__->_programExists($soffice)) {
-        __PACKAGE__->register_handler("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ".xlsx");
-    }
+if (__PACKAGE__->_programExists("soffice")) {
+  if (defined($Foswiki::cfg{StringifierContrib}{ExcelIndexer}) && ($Foswiki::cfg{StringifierContrib}{ExcelIndexer} eq 'soffice')) {
+    __PACKAGE__->register_handler("application/msexcel", ".xls", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ".xlsx");
+  }
 }
 
 sub stringForFile {
-    my ($self, $file) = @_;
-    my $tmpDir = File::Temp->newdir();
-    
-    my $cmd = $soffice . ' --convert-to html --invisible --headless --minimized --outdir %OUTDIR|F% %FILENAME|F%';
+    my ($this, $file) = @_;
 
-    my ($data, $exit) = Foswiki::Sandbox->sysCommand(
+    my $tmpDir = File::Temp->newdir();
+    my $cmd = $Foswiki::cfg{StringifierContrib}{SofficeCmd} || 'soffice --convert-to %FORMAT|S% --invisible --headless --minimized --outdir %OUTDIR|F% %FILENAME|F%';
+
+    my ($data, $exit, $error) = Foswiki::Sandbox->sysCommand(
         $cmd,
         OUTDIR => $tmpDir->dirname,
         FILENAME  => $file,
+        FORMAT => "pdf"
     );
 
-    return '' unless ($exit == 0);
+    if ($error) {
+      print STDERR "ERROR: $error\n";
+      return "";
+    }
 
-    my $tmpFile = $tmpDir->dirname . '/' . basename($file, ".xls", ".xlsx") . '.html';
+    my $pdfFile = $tmpDir->dirname . '/' . basename($file, ".pptx", ".ppt") . '.txt';
 
-    return Foswiki::Contrib::Stringifier->stringFor($tmpFile, "text/html");
+    my $stringifier = Foswiki::Contrib::Stringifier::Plugins::PDF->new();
+    return $stringifier->stringForFile($pdfFile);
 }
 
 1;
-

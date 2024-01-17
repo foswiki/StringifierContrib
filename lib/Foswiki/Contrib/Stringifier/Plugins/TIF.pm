@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2018 Foswiki Contributors
+# Copyright (C) 2009-2024 Foswiki Contributors
 #
 # For licensing info read LICENSE file in the Foswiki root.
 # This program is free software; you can redistribute it and/or
@@ -20,25 +20,26 @@ use warnings;
 use Foswiki::Contrib::Stringifier::Base ();
 our @ISA = qw( Foswiki::Contrib::Stringifier::Base );
 
-my $tesseractCmd = $Foswiki::cfg{StringifierContrib}{tesseractCmd} || 'tesseract';
-
-if (__PACKAGE__->_programExists($tesseractCmd)) {
+if (__PACKAGE__->_programExists("tesseract")) {
   __PACKAGE__->register_handler("image/tiff", ".tif", ".tiff");
 }
 
 sub stringForFile {
-    my ($self, $filename) = @_;
+    my ($this, $filename) = @_;
     
     # check it is a text file
     return '' unless ( -e $filename );
 
-    my $cmd = $tesseractCmd;
-    $cmd .= " %FILENAME|F% -" unless $cmd =~ /%FILENAME\|F%/; 
+    my $cmd = $Foswiki::cfg{StringifierContrib}{TesseractCmd} || 'tesseract %FILENAME|F% -';
 
-    my ($text, $exit) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $filename);
+    my ($text, $exit, $error) = Foswiki::Sandbox->sysCommand($cmd, FILENAME => $filename);
 
-    return $self->decode($text);
+    if ($exit) {
+      print STDERR "ERROR: $error\n";
+      return "";
+    }
+
+    return $this->decode($text);
 }
 
 1;
-
